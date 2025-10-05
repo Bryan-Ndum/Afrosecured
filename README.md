@@ -1,30 +1,45 @@
-# AfroSecure landing page
+# 🛡️ AfroSecured
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+**Africa's Shield for a Safer Digital World**
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/ndumbaba-9181s-projects/v0-afro-secure-landing-page-zo)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/jEnfthxyAud)
+AfroSecured is a community-driven cybersecurity intelligence platform that helps people verify, scan, and understand the safety of websites, messages, and digital transactions with clarity and confidence.  
+Born in Africa and built for the world.
 
-## Overview
+---
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## 🌍 Mission
 
-## Deployment
+Restore trust in Africa's digital economy and extend that trust globally by combining community reports, clear intelligence, and practical tools that empower everyone to stay safe online.
 
-Your project is live at:
+---
 
-**[https://vercel.com/ndumbaba-9181s-projects/v0-afro-secure-landing-page-zo](https://vercel.com/ndumbaba-9181s-projects/v0-afro-secure-landing-page-zo)**
+## ⚙️ Key Features
 
-## Build your app
+- **AI Scam Analyzer** – Analyze suspicious messages and emails instantly  
+- **URL Threat Scanner** – Scan websites using multi-source threat intelligence  
+- **Phone Number Lookup** – Detect numbers linked to scams  
+- **Email Header Analyzer** – Identify spoofing and phishing indicators  
+- **Live Threat Dashboard** – Track scams in real time  
+- **Community Reports** – Verified user-submitted scam data  
+- **Weekly Digest** – Security tips and global scam insights  
 
-Continue building your app on:
+---
 
-**[https://v0.app/chat/projects/jEnfthxyAud](https://v0.app/chat/projects/jEnfthxyAud)**
+## 🧠 Tech Stack
 
-## How It Works
+- **Frontend:** Next.js, React, TypeScript  
+- **Styling:** Tailwind CSS, shadcn/ui  
+- **Database:** Supabase (PostgreSQL + Realtime)  
+- **AI:** Vercel AI SDK with GPT models  
+- **Deployment:** Vercel  
+- **Security:** mTLS, encrypted communications  
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+---
+
+## 🚀 Getting Started
+
+Website: https://www.afrosecured.com/
+
+📄 License
+
+This project is licensed under the MIT License.
