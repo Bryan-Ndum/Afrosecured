@@ -2,6 +2,7 @@ import { HeroSection } from "@/components/hero-section"
 import { TodayThreat } from "@/components/today-threat"
 import { SecurityIntegrations } from "@/components/security-integrations"
 import { HowItWorks } from "@/components/how-it-works"
+import { TrustedSources } from "@/components/trusted-sources"
 import { WeeklyScams } from "@/components/weekly-scams"
 import { LiveFeeds } from "@/components/live-feeds"
 import { QuickGuides } from "@/components/quick-guides"
@@ -15,6 +16,7 @@ export default function HomePage() {
       <TodayThreat />
       <SecurityIntegrations />
       <HowItWorks />
+      <TrustedSources />
       <WeeklyScams />
       <LiveFeeds />
       <QuickGuides />

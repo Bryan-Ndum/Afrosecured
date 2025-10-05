@@ -53,17 +53,22 @@ export function TrustedSources() {
         {
           url: "https://krebsonsecurity.com/feed/",
           source: "Krebs on Security",
-          category: "Cybersecurity",
+          category: "Investigative Journalism",
         },
         {
           url: "https://feeds.feedburner.com/TheHackersNews",
           source: "The Hacker News",
-          category: "Cybersecurity",
+          category: "Breaking News",
         },
         {
-          url: "https://www.reddit.com/r/Scams/.rss",
-          source: "Reddit r/Scams",
-          category: "Community Reports",
+          url: "https://www.darkreading.com/rss.xml",
+          source: "Dark Reading",
+          category: "Enterprise Security",
+        },
+        {
+          url: "https://www.bleepingcomputer.com/feed/",
+          source: "BleepingComputer",
+          category: "Technical Analysis",
         },
       ]
 
@@ -521,6 +526,63 @@ export function TrustedSources() {
 
         {/* Source Links Grid */}
         <div className="grid md:grid-cols-4 gap-6 mt-12">
+          <Card className="p-6 rounded-2xl hover:shadow-lg transition-all bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20">
+            <h4 className="font-semibold mb-4 flex items-center gap-2">
+              <Newspaper className="w-5 h-5 text-blue-500" />
+              Elite Cybersecurity News
+            </h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a
+                  href="https://www.darkreading.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors flex items-center gap-2 group"
+                >
+                  <span className="font-medium">Dark Reading</span>
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+                <p className="text-xs text-muted-foreground mt-1">Enterprise security & threat intelligence</p>
+              </li>
+              <li>
+                <a
+                  href="https://krebsonsecurity.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors flex items-center gap-2 group"
+                >
+                  <span className="font-medium">Krebs on Security</span>
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+                <p className="text-xs text-muted-foreground mt-1">Investigative cybercrime journalism</p>
+              </li>
+              <li>
+                <a
+                  href="https://www.bleepingcomputer.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors flex items-center gap-2 group"
+                >
+                  <span className="font-medium">BleepingComputer</span>
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+                <p className="text-xs text-muted-foreground mt-1">Breaking news & technical fixes</p>
+              </li>
+              <li>
+                <a
+                  href="https://thehackernews.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors flex items-center gap-2 group"
+                >
+                  <span className="font-medium">The Hacker News</span>
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+                <p className="text-xs text-muted-foreground mt-1">Real-time cyber incidents & exploits</p>
+              </li>
+            </ul>
+          </Card>
+
           <Card className="p-6 rounded-2xl hover:shadow-lg transition-all">
             <h4 className="font-semibold mb-4 flex items-center gap-2">
               <Database className="w-5 h-5 text-primary" />
@@ -546,48 +608,6 @@ export function TrustedSources() {
                   className="hover:text-primary transition-colors flex items-center gap-2 group"
                 >
                   World's Biggest Breaches
-                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-              </li>
-            </ul>
-          </Card>
-
-          <Card className="p-6 rounded-2xl hover:shadow-lg transition-all">
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <Newspaper className="w-5 h-5 text-primary" />
-              Cybersecurity News
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a
-                  href="https://thehackernews.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors flex items-center gap-2 group"
-                >
-                  The Hacker News
-                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.databreachtoday.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors flex items-center gap-2 group"
-                >
-                  Data Breach Today
-                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://krebsonsecurity.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors flex items-center gap-2 group"
-                >
-                  Krebs on Security
                   <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
               </li>
