@@ -5,74 +5,74 @@
 
 :root {
   /* Updated theme for AfroSecure cyber-inspired design */
-  --background: oklch(0.08 0.02 240); /* Deep navy background */
-  --foreground: oklch(0.95 0.01 180); /* Light cyan-white text */
-  --card: oklch(0.12 0.03 240); /* Slightly lighter navy for cards */
-  --card-foreground: oklch(0.95 0.01 180);
-  --popover: oklch(0.12 0.03 240);
-  --popover-foreground: oklch(0.95 0.01 180);
-  --primary: oklch(0.65 0.15 180); /* Bright teal primary */
-  --primary-foreground: oklch(0.08 0.02 240);
-  --secondary: oklch(0.18 0.04 240); /* Darker navy secondary */
-  --secondary-foreground: oklch(0.95 0.01 180);
-  --muted: oklch(0.15 0.03 240);
-  --muted-foreground: oklch(0.7 0.05 180); /* Muted teal */
-  --accent: oklch(0.55 0.12 200); /* Cyan accent */
-  --accent-foreground: oklch(0.08 0.02 240);
-  --destructive: oklch(0.6 0.2 15); /* Red for warnings */
-  --destructive-foreground: oklch(0.95 0.01 180);
-  --border: oklch(0.2 0.04 240); /* Subtle borders */
-  --input: oklch(0.15 0.03 240);
-  --ring: oklch(0.65 0.15 180); /* Teal focus rings */
-  --chart-1: oklch(0.65 0.15 180);
-  --chart-2: oklch(0.55 0.12 200);
-  --chart-3: oklch(0.45 0.1 220);
-  --chart-4: oklch(0.7 0.18 160);
-  --chart-5: oklch(0.6 0.2 15);
-  --radius: 0.75rem;
-  --sidebar: oklch(0.1 0.02 240);
-  --sidebar-foreground: oklch(0.95 0.01 180);
-  --sidebar-primary: oklch(0.65 0.15 180);
-  --sidebar-primary-foreground: oklch(0.08 0.02 240);
-  --sidebar-accent: oklch(0.15 0.03 240);
-  --sidebar-accent-foreground: oklch(0.95 0.01 180);
-  --sidebar-border: oklch(0.2 0.04 240);
-  --sidebar-ring: oklch(0.65 0.15 180);
+  --background: oklch(0.12 0.02 240); /* Softer dark background */
+  --foreground: oklch(0.98 0.005 180); /* Clean white text */
+  --card: oklch(0.16 0.02 240); /* Subtle card background */
+  --card-foreground: oklch(0.98 0.005 180);
+  --popover: oklch(0.16 0.02 240);
+  --popover-foreground: oklch(0.98 0.005 180);
+  --primary: oklch(0.6 0.12 180); /* Refined teal primary */
+  --primary-foreground: oklch(0.98 0.005 180);
+  --secondary: oklch(0.2 0.02 240); /* Darker navy secondary */
+  --secondary-foreground: oklch(0.98 0.005 180);
+  --muted: oklch(0.18 0.02 240);
+  --muted-foreground: oklch(0.65 0.03 180); /* Muted teal */
+  --accent: oklch(0.55 0.1 190); /* Cyan accent */
+  --accent-foreground: oklch(0.98 0.005 180);
+  --destructive: oklch(0.55 0.18 20); /* Red for warnings */
+  --destructive-foreground: oklch(0.98 0.005 180);
+  --border: oklch(0.25 0.02 240); /* Subtle borders */
+  --input: oklch(0.18 0.02 240);
+  --ring: oklch(0.6 0.12 180); /* Teal focus rings */
+  --chart-1: oklch(0.6 0.12 180);
+  --chart-2: oklch(0.55 0.1 190);
+  --chart-3: oklch(0.5 0.08 200);
+  --chart-4: oklch(0.65 0.14 170);
+  --chart-5: oklch(0.55 0.18 20);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.14 0.02 240);
+  --sidebar-foreground: oklch(0.98 0.005 180);
+  --sidebar-primary: oklch(0.6 0.12 180);
+  --sidebar-primary-foreground: oklch(0.98 0.005 180);
+  --sidebar-accent: oklch(0.18 0.02 240);
+  --sidebar-accent-foreground: oklch(0.98 0.005 180);
+  --sidebar-border: oklch(0.25 0.02 240);
+  --sidebar-ring: oklch(0.6 0.12 180);
 }
 
 .dark {
-  --background: oklch(0.08 0.02 240);
-  --foreground: oklch(0.95 0.01 180);
-  --card: oklch(0.12 0.03 240);
-  --card-foreground: oklch(0.95 0.01 180);
-  --popover: oklch(0.12 0.03 240);
-  --popover-foreground: oklch(0.95 0.01 180);
-  --primary: oklch(0.65 0.15 180);
-  --primary-foreground: oklch(0.08 0.02 240);
-  --secondary: oklch(0.18 0.04 240);
-  --secondary-foreground: oklch(0.95 0.01 180);
-  --muted: oklch(0.15 0.03 240);
-  --muted-foreground: oklch(0.7 0.05 180);
-  --accent: oklch(0.55 0.12 200);
-  --accent-foreground: oklch(0.08 0.02 240);
-  --destructive: oklch(0.6 0.2 15);
-  --destructive-foreground: oklch(0.95 0.01 180);
-  --border: oklch(0.2 0.04 240);
-  --input: oklch(0.15 0.03 240);
-  --ring: oklch(0.65 0.15 180);
-  --chart-1: oklch(0.65 0.15 180);
-  --chart-2: oklch(0.55 0.12 200);
-  --chart-3: oklch(0.45 0.1 220);
-  --chart-4: oklch(0.7 0.18 160);
-  --chart-5: oklch(0.6 0.2 15);
-  --sidebar: oklch(0.1 0.02 240);
-  --sidebar-foreground: oklch(0.95 0.01 180);
-  --sidebar-primary: oklch(0.65 0.15 180);
-  --sidebar-primary-foreground: oklch(0.08 0.02 240);
-  --sidebar-accent: oklch(0.15 0.03 240);
-  --sidebar-accent-foreground: oklch(0.95 0.01 180);
-  --sidebar-border: oklch(0.2 0.04 240);
-  --sidebar-ring: oklch(0.65 0.15 180);
+  --background: oklch(0.12 0.02 240);
+  --foreground: oklch(0.98 0.005 180);
+  --card: oklch(0.16 0.02 240);
+  --card-foreground: oklch(0.98 0.005 180);
+  --popover: oklch(0.16 0.02 240);
+  --popover-foreground: oklch(0.98 0.005 180);
+  --primary: oklch(0.6 0.12 180);
+  --primary-foreground: oklch(0.98 0.005 180);
+  --secondary: oklch(0.2 0.02 240);
+  --secondary-foreground: oklch(0.98 0.005 180);
+  --muted: oklch(0.18 0.02 240);
+  --muted-foreground: oklch(0.65 0.03 180);
+  --accent: oklch(0.55 0.1 190);
+  --accent-foreground: oklch(0.98 0.005 180);
+  --destructive: oklch(0.55 0.18 20);
+  --destructive-foreground: oklch(0.98 0.005 180);
+  --border: oklch(0.25 0.02 240);
+  --input: oklch(0.18 0.02 240);
+  --ring: oklch(0.6 0.12 180);
+  --chart-1: oklch(0.6 0.12 180);
+  --chart-2: oklch(0.55 0.1 190);
+  --chart-3: oklch(0.5 0.08 200);
+  --chart-4: oklch(0.65 0.14 170);
+  --chart-5: oklch(0.55 0.18 20);
+  --sidebar: oklch(0.14 0.02 240);
+  --sidebar-foreground: oklch(0.98 0.005 180);
+  --sidebar-primary: oklch(0.6 0.12 180);
+  --sidebar-primary-foreground: oklch(0.98 0.005 180);
+  --sidebar-accent: oklch(0.18 0.02 240);
+  --sidebar-accent-foreground: oklch(0.98 0.005 180);
+  --sidebar-border: oklch(0.25 0.02 240);
+  --sidebar-ring: oklch(0.6 0.12 180);
 }
 
 @theme inline {
@@ -125,11 +125,11 @@
   }
 }
 
-/* Added custom animations and cyber grid background */
+/* Added custom animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -137,26 +137,6 @@
   }
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(101, 163, 178, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(101, 163, 178, 0.6);
-  }
-}
-
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.cyber-grid {
-  background-image: linear-gradient(rgba(101, 163, 178, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(101, 163, 178, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
