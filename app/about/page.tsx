@@ -4,10 +4,10 @@ import { Shield, Heart, Eye, Lock, Globe, CheckCircle } from "lucide-react"
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background pt-24">
       <Header />
 
-      <section className="py-20 px-4">
+      <section className="pt-12 pb-20 px-4">
         <div className="max-w-4xl mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-16">
@@ -38,7 +38,7 @@ export default function AboutPage() {
                 </p>
 
                 <p className="text-lg leading-relaxed font-semibold text-primary">
-                  At Afrosecured, trust is our foundation and transparency is our promise. We're here to make the
+                  At Afrosecured, trust is our foundation and transparency is our promise. We are here to make the
                   digital world safer, fairer, and more open with one secured connection at a time.
                 </p>
               </div>
@@ -55,7 +55,7 @@ export default function AboutPage() {
                   <h2 className="text-3xl font-bold mb-4">Our Commitment</h2>
                   <p className="text-lg leading-relaxed text-muted-foreground">
                     Every scan, every alert, and every security report from Afrosecured shows why something is safe or
-                    unsafe. No hidden algorithms, no secret filters — just facts you can understand and decide on.
+                    unsafe. No hidden algorithms, no secret filters, just facts you can understand and decide on.
                     Because real security isn't about fear, it's about clarity.
                   </p>
                 </div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
               <Globe className="w-16 h-16 text-primary mx-auto mb-6" />
               <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty leading-relaxed">
-                To make the digital world safer, fairer, and more open — one secured connection at a time. We empower
+                To make the digital world safer, fairer, and more open with one secured connection at a time. We empower
                 communities with the knowledge and tools they need to navigate the internet with confidence.
               </p>
             </CardContent>

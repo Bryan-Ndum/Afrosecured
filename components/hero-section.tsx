@@ -1,72 +1,94 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Shield, AlertTriangle, Globe } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Shield } from "lucide-react"
+import { useState } from "react"
+import Link from "next/link"
 
 export function HeroSection() {
+  const [selectedRegion, setSelectedRegion] = useState("global")
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 py-20 pt-32">
-      {/* Background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-32 h-32 border border-primary/20 rounded-full animate-pulse" />
-        <div className="absolute bottom-40 right-20 w-24 h-24 border border-accent/30 rounded-full animate-pulse" />
-        <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-primary rounded-full animate-ping" />
-        <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-accent rounded-full animate-ping" />
+    <section className="relative min-h-[90vh] flex items-center justify-center px-4 py-20 pt-32 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto text-center">
-        {/* Logo/Icon */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse delay-1000" />
+
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
         <div className="flex justify-center mb-8">
           <div className="relative">
-            <Shield className="w-20 h-20 text-primary animate-pulse-glow" />
-            <Globe className="absolute -top-2 -right-2 w-8 h-8 text-accent" />
+            <div className="absolute inset-0 bg-primary/30 blur-xl rounded-full" />
+            <Shield className="relative w-16 h-16 text-primary" />
           </div>
         </div>
 
-        {/* Main headline */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in-up text-balance">
-          <span className="text-foreground">AfroSecure:</span> <span className="text-primary">Digital Security</span>{" "}
-          <span className="text-accent">That Saves Lives</span>
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-balance">
+          <span className="text-foreground">Where Safety Meets </span>
+          <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Trust</span>
         </h1>
 
-        {/* Subheadline */}
-        <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto animate-fade-in-up text-pretty">
-          Comprehensive digital security protection for Africans and the diaspora - from scam prevention to emergency
-          protocols that can save lives.
+        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty">
+          Afrosecured helps you spot scams, verify links, and protect your digital life with one secured connection at a
+          time.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up">
+        <div className="flex justify-center mb-8">
+          <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+            <SelectTrigger className="w-[200px] bg-card border-border">
+              <SelectValue placeholder="Select region" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="global">🌍 Global</SelectItem>
+              <SelectItem value="us">🇺🇸 United States</SelectItem>
+              <SelectItem value="gh">🇬🇭 Ghana</SelectItem>
+              <SelectItem value="ke">🇰🇪 Kenya</SelectItem>
+              <SelectItem value="ng">🇳🇬 Nigeria</SelectItem>
+              <SelectItem value="za">🇿🇦 South Africa</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
           <Button
+            asChild
             size="lg"
-            className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground animate-pulse-glow"
-            onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
+            className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
           >
-            Join the Waitlist
+            <Link href="/tools">Try Security Tools</Link>
           </Button>
           <Button
             variant="outline"
             size="lg"
-            className="text-lg px-8 py-6 border-accent text-accent hover:bg-accent hover:text-accent-foreground bg-transparent"
+            className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground bg-transparent"
+            onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
           >
-            Learn More
+            Join Waitlist
           </Button>
         </div>
 
-        {/* Trust indicators */}
-        <div className="mt-16 flex flex-wrap justify-center items-center gap-8 text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-destructive" />
-            <span>Real-time alerts</span>
+        <div className="flex flex-wrap justify-center gap-6 mb-8">
+          <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
+            <span className="text-2xl font-bold text-primary">AI</span>
+            <span className="text-sm text-muted-foreground">Powered Analysis</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-primary" />
-            <span>Privacy-first</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
+            <span className="text-2xl font-bold text-primary">Real-Time</span>
+            <span className="text-sm text-muted-foreground">Threat Detection</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Globe className="w-5 h-5 text-accent" />
-            <span>Global coverage</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
+            <span className="text-2xl font-bold text-primary">Community</span>
+            <span className="text-sm text-muted-foreground">Driven Protection</span>
           </div>
+        </div>
+
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary">
+          <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+          Launched 2025 • Open Beta
         </div>
       </div>
     </section>

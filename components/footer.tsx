@@ -1,5 +1,4 @@
 import { Shield, Twitter, Linkedin, Mail, BookOpen, AlertTriangle } from "lucide-react"
-import Image from "next/image"
 
 export function Footer() {
   return (
@@ -9,7 +8,7 @@ export function Footer() {
           {/* Logo and description */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <Image src="/afrosecured-logo.png" alt="AfroSecured Logo" width={32} height={32} className="w-8 h-8" />
+              <Shield className="w-8 h-8 text-primary" />
               <span className="text-2xl font-bold">AfroSecured</span>
             </div>
             <p className="text-muted-foreground mb-6 text-sm text-pretty">

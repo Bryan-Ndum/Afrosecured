@@ -3,14 +3,14 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu } from "lucide-react"
+import { Menu, Shield } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
+    { href: "/tools", label: "Security Tools" },
     { href: "/intel", label: "Intelligence Feed" },
     { href: "/social", label: "Social Monitoring" },
     { href: "/report", label: "Report Scam" },
@@ -24,7 +24,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <Image src="/afrosecured-logo.png" alt="AfroSecured" width={36} height={36} className="w-9 h-9" />
+            <Shield className="w-7 h-7 text-primary" />
             <span className="text-xl font-bold">AfroSecured</span>
           </Link>
 
@@ -61,7 +61,7 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-72">
               <div className="flex items-center gap-2 mb-8">
-                <Image src="/afrosecured-logo.png" alt="AfroSecured" width={32} height={32} className="w-8 h-8" />
+                <Shield className="w-7 h-7 text-primary" />
                 <span className="text-lg font-bold">AfroSecured</span>
               </div>
 

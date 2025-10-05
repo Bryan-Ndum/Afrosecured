@@ -43,11 +43,11 @@ export function WaitlistSection() {
             <div className="flex justify-center gap-4 mt-4">
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
-                12,847 joined
+                Open Beta
               </Badge>
               <Badge variant="outline" className="flex items-center gap-1">
                 <Zap className="w-3 h-3" />
-                Launching Q2 2025
+                Join Now
               </Badge>
             </div>
           </CardHeader>
