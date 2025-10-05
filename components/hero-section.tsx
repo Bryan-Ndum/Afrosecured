@@ -27,10 +27,13 @@ export function HeroSection() {
           </div>
         </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-balance">
-          <span className="text-foreground">Where Safety Meets </span>
-          <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Trust</span>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-balance">
+          <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
+            Cybersecurity Intelligence Hub
+          </span>
         </h1>
+
+        <p className="text-2xl md:text-3xl font-semibold text-muted-foreground/80 mb-6">Where Safety Meets Trust</p>
 
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty">
           Afrosecured helps you spot scams, verify links, and protect your digital life with one secured connection at a

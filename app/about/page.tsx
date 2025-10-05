@@ -1,6 +1,6 @@
 import { Header } from "@/components/header"
 import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Heart, Eye, Lock, Globe, CheckCircle } from "lucide-react"
+import { Shield, Target, Users, Globe, Lightbulb, TrendingUp } from "lucide-react"
 
 export default function AboutPage() {
   return (
@@ -17,7 +17,7 @@ export default function AboutPage() {
             <h1 className="text-5xl font-bold mb-6 text-balance">
               About <span className="text-primary">AfroSecured</span>
             </h1>
-            <p className="text-xl text-muted-foreground text-pretty">Where safety meets trust</p>
+            <p className="text-xl text-muted-foreground text-pretty">Africa's Shield for a Safer Digital World</p>
           </div>
 
           {/* Main Story */}
@@ -25,40 +25,37 @@ export default function AboutPage() {
             <CardContent className="p-8 md:p-12">
               <div className="prose prose-lg max-w-none">
                 <p className="text-lg leading-relaxed mb-6">
-                  Afrosecured was born out of frustration, watching people I know get scammed online. Friends losing
-                  money to fake stores, family members tricked by phishing messages, and small businesses falling for
-                  "verified" links that weren't what they seemed. It opened my eyes to how little trust people have in
-                  the online world, and how much that trust matters.
+                  Every day, people around the world, especially across Africa, lose money, data, and confidence to
+                  online scams. From fake investment links and romance frauds to phishing sites that look real, the
+                  problem is not only digital but deeply human. It affects families, businesses, and communities.
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
-                  That's why Afrosecured isn't just about protection, it is about restoring confidence. We built it to
-                  help everyday users, students, creators, and entrepreneurs to navigate the internet safely with tools
-                  that are clear, honest, and transparent.
+                  <span className="font-semibold text-primary">Afrosecured was created to change that reality.</span>
+                </p>
+
+                <p className="text-lg leading-relaxed mb-6">
+                  Born in Africa and built for the world, it is a community-driven cybersecurity platform that helps
+                  people verify, scan, and understand the safety of websites, messages, and digital transactions with
+                  clarity and confidence.
+                </p>
+
+                <p className="text-lg leading-relaxed mb-6">
+                  Our mission is to restore trust in Africa's digital economy and extend that trust globally. We believe
+                  that cybersecurity should be accessible to everyone and that transparency is the key to real
+                  protection.
+                </p>
+
+                <p className="text-lg leading-relaxed mb-6">
+                  By combining global threat intelligence with African innovation, Afrosecured detects scams faster,
+                  educates communities, and builds awareness through honest, easy-to-understand insights. Each scan
+                  reveals the truth and empowers users to take control of their safety online.
                 </p>
 
                 <p className="text-lg leading-relaxed font-semibold text-primary">
-                  At Afrosecured, trust is our foundation and transparency is our promise. We are here to make the
-                  digital world safer, fairer, and more open with one secured connection at a time.
+                  Afrosecured believes that Africa can lead the world in redefining digital trust through openness,
+                  education, and community-driven security.
                 </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-12 border-primary/30 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5">
-            <CardContent className="p-8 md:p-12">
-              <div className="flex items-start gap-4 mb-6">
-                <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full shrink-0">
-                  <CheckCircle className="w-8 h-8 text-primary" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold mb-4">Our Commitment</h2>
-                  <p className="text-lg leading-relaxed text-muted-foreground">
-                    Every scan, every alert, and every security report from Afrosecured shows why something is safe or
-                    unsafe. No hidden algorithms, no secret filters, just facts you can understand and decide on.
-                    Because real security isn't about fear, it's about clarity.
-                  </p>
-                </div>
               </div>
             </CardContent>
           </Card>
@@ -68,32 +65,32 @@ export default function AboutPage() {
             <Card className="text-center border-primary/20 rounded-2xl hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                  <Lock className="w-8 h-8 text-primary" />
+                  <Target className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Trust</h3>
-                <p className="text-muted-foreground">Building confidence through reliable, honest security solutions</p>
+                <h3 className="text-xl font-bold mb-3">Accessibility</h3>
+                <p className="text-muted-foreground">
+                  Cybersecurity should be accessible to everyone, not just experts
+                </p>
               </CardContent>
             </Card>
 
             <Card className="text-center border-accent/20 rounded-2xl hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <div className="inline-flex items-center justify-center p-3 bg-accent/10 rounded-full mb-4">
-                  <Eye className="w-8 h-8 text-accent" />
+                  <Lightbulb className="w-8 h-8 text-accent" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">Transparency</h3>
-                <p className="text-muted-foreground">Clear explanations with no hidden algorithms or secret filters</p>
+                <p className="text-muted-foreground">Honest, easy-to-understand insights with no hidden algorithms</p>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-destructive/20 rounded-2xl hover:shadow-lg transition-shadow">
+            <Card className="text-center border-primary/20 rounded-2xl hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
-                <div className="inline-flex items-center justify-center p-3 bg-destructive/10 rounded-full mb-4">
-                  <Heart className="w-8 h-8 text-destructive" />
+                <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
+                  <Users className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-3">Community</h3>
-                <p className="text-muted-foreground">
-                  Protecting everyday users, students, creators, and entrepreneurs
-                </p>
+                <p className="text-muted-foreground">Community-driven security that educates and empowers users</p>
               </CardContent>
             </Card>
           </div>
@@ -102,11 +99,15 @@ export default function AboutPage() {
           <Card className="bg-gradient-to-br from-primary/10 via-accent/5 to-background border-primary/20 rounded-2xl">
             <CardContent className="p-8 md:p-12 text-center">
               <Globe className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty leading-relaxed">
-                To make the digital world safer, fairer, and more open with one secured connection at a time. We empower
-                communities with the knowledge and tools they need to navigate the internet with confidence.
+              <h2 className="text-3xl font-bold mb-6">Our Vision</h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty leading-relaxed mb-6">
+                To restore trust in Africa's digital economy and extend that trust globally by combining global threat
+                intelligence with African innovation.
               </p>
+              <div className="inline-flex items-center gap-2 text-primary font-semibold">
+                <TrendingUp className="w-5 h-5" />
+                <span>Africa leading the world in digital trust</span>
+              </div>
             </CardContent>
           </Card>
         </div>
