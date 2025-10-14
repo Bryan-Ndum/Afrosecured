@@ -13,12 +13,21 @@ interface ThreatIndicator {
 export class ThreatIntelligenceAggregator {
   private async fetchAlienVault(): Promise<ThreatIndicator[]> {
     const apiKey = process.env.ALIENVAULT_API_KEY
-    if (!apiKey) return []
+    if (!apiKey) {
+      console.log("[v0] AlienVault API key not found, skipping")
+      return []
+    }
 
     try {
       const response = await fetch("https://otx.alienvault.com/api/v1/pulses/subscribed", {
         headers: { "X-OTX-API-KEY": apiKey },
       })
+
+      if (!response.ok) {
+        console.log("[v0] AlienVault API error:", response.status)
+        return []
+      }
+
       const data = await response.json()
 
       const indicators: ThreatIndicator[] = []
@@ -37,19 +46,28 @@ export class ThreatIntelligenceAggregator {
       }
       return indicators
     } catch (error) {
-      console.error("[v0] AlienVault fetch error:", error)
+      console.log("[v0] AlienVault fetch failed, skipping:", error)
       return []
     }
   }
 
   private async fetchAbuseIPDB(): Promise<ThreatIndicator[]> {
     const apiKey = process.env.ABUSEIPDB_API_KEY
-    if (!apiKey) return []
+    if (!apiKey) {
+      console.log("[v0] AbuseIPDB API key not found, skipping")
+      return []
+    }
 
     try {
       const response = await fetch("https://api.abuseipdb.com/api/v2/blacklist?limit=100", {
         headers: { Key: apiKey, Accept: "application/json" },
       })
+
+      if (!response.ok) {
+        console.log("[v0] AbuseIPDB API error:", response.status)
+        return []
+      }
+
       const data = await response.json()
 
       return (data.data || []).map((item: any) => ({
@@ -62,7 +80,7 @@ export class ThreatIntelligenceAggregator {
         last_seen: item.lastReportedAt,
       }))
     } catch (error) {
-      console.error("[v0] AbuseIPDB fetch error:", error)
+      console.log("[v0] AbuseIPDB fetch failed, skipping:", error)
       return []
     }
   }
@@ -75,20 +93,29 @@ export class ThreatIntelligenceAggregator {
     const allThreats = [...alienVault, ...abuseIPDB]
     console.log(`[v0] Aggregated ${allThreats.length} threats`)
 
+    if (allThreats.length === 0) {
+      console.log("[v0] No threats to save")
+      return
+    }
+
     // Save to database
     const supabase = await createClient()
 
     for (const threat of allThreats) {
-      await supabase.from("cybersecurity_articles").insert({
-        title: `${threat.type.toUpperCase()} Threat: ${threat.value}`,
-        content: threat.description,
-        source: threat.source,
-        source_url: null,
-        published_at: threat.first_seen,
-        threat_level: threat.severity,
-        category: "threat-intelligence",
-        tags: [threat.type, threat.severity],
-      })
+      try {
+        await supabase.from("cybersecurity_articles").insert({
+          title: `${threat.type.toUpperCase()} Threat: ${threat.value}`,
+          content: threat.description,
+          source: threat.source,
+          source_url: null,
+          published_at: threat.first_seen,
+          threat_level: threat.severity,
+          category: "threat-intelligence",
+          tags: [threat.type, threat.severity],
+        })
+      } catch (error) {
+        console.log("[v0] Failed to save threat:", error)
+      }
     }
 
     console.log("[v0] Threat aggregation complete")

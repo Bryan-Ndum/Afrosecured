@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { PhishTankService } from "@/services/phishtank-service"
 import { createClient } from "@/lib/supabase/server"
 
 export async function POST(request: Request) {
@@ -10,25 +9,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "URL is required" }, { status: 400 })
     }
 
-    // Check PhishTank
-    const isPhishing = await PhishTankService.checkURL(url)
-
-    if (isPhishing) {
-      return NextResponse.json({
-        safe: false,
-        threat_level: "critical",
-        source: "PhishTank (Cisco Talos)",
-        message: "This URL has been verified as a phishing site by Cisco Talos PhishTank",
-        details: "Do not enter any personal information or credentials on this site.",
-      })
-    }
-
-    // Check other threat sources
     const supabase = await createClient()
     const { data: threats } = await supabase
       .from("cybersecurity_articles")
       .select("*")
-      .contains("indicators", [url])
+      .or(`content.ilike.%${url}%,title.ilike.%${url}%`)
       .limit(1)
 
     if (threats && threats.length > 0) {

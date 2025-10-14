@@ -1,28 +1,3 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron/update-articles",
-      "schedule": "0 * * * *"
-    },
-    {
-      "path": "/api/cron/sync-threat-intelligence",
-      "schedule": "0 */6 * * *"
-    },
-    {
-      "path": "/api/cron/generate-daily-content",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/ingest-phishtank",
-      "schedule": "0 */2 * * *"
-    },
-    {
-      "path": "/api/cron/aggregate-threats",
-      "schedule": "0 */3 * * *"
-    },
-    {
-      "path": "/api/cron/monitor-rss",
-      "schedule": "0 */4 * * *"
-    }
-  ]
+  "crons": []
 }
