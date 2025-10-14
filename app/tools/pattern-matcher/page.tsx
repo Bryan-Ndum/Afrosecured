@@ -3,17 +3,20 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { AlertCircle } from "lucide-react"
 
 export default function PatternMatcherPage() {
   const [text, setText] = useState("")
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const matchPattern = async () => {
     if (!text.trim()) return
 
     setLoading(true)
     setResult(null)
+    setError(null)
 
     try {
       const response = await fetch("/api/tools/pattern-match", {
@@ -22,11 +25,20 @@ export default function PatternMatcherPage() {
         body: JSON.stringify({ text }),
       })
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Server error: ${response.status}`)
+      }
+
       const data = await response.json()
       setResult(data)
     } catch (error) {
       console.error("[v0] Pattern matching error:", error)
-      setResult({ error: "Failed to match patterns" })
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to match patterns. Please check your connection and try again.",
+      )
     } finally {
       setLoading(false)
     }
@@ -57,7 +69,27 @@ export default function PatternMatcherPage() {
           </div>
         </Card>
 
-        {result && (
+        {error && (
+          <Card className="p-6 mb-6 border-red-500/50 bg-red-500/5">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-500 mb-1">Analysis Failed</h3>
+                <p className="text-sm text-red-500/90">{error}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setError(null)}
+                  className="mt-3 border-red-500/30 hover:bg-red-500/10"
+                >
+                  Dismiss
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {result && !error && (
           <Card className="p-6">
             {result.error ? (
               <div className="text-red-500">{result.error}</div>

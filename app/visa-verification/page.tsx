@@ -197,27 +197,6 @@ export default function VisaVerificationPage() {
             )}
           </CardContent>
         </Card>
-
-        {/* Setup Instructions */}
-        <Card className="rounded-2xl border-2 bg-muted/50">
-          <CardHeader>
-            <CardTitle>Environment Setup</CardTitle>
-            <CardDescription>Configure these environment variables to enable live Visa API integration</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 text-sm font-mono bg-background p-4 rounded-lg">
-              <div>VISA_CERT_PEM=&quot;-----BEGIN CERTIFICATE-----...&quot;</div>
-              <div>VISA_PRIVATE_KEY_PEM=&quot;-----BEGIN PRIVATE KEY-----...&quot;</div>
-              <div>VISA_CA_BUNDLE_PEM=&quot;-----BEGIN CERTIFICATE-----...&quot;</div>
-              <div>VISA_BASE_URL=&quot;sandbox.api.visa.com&quot;</div>
-              <div>VISA_USER_ID=&quot;your_user_id&quot;</div>
-              <div>VISA_PASSWORD=&quot;your_password&quot;</div>
-            </div>
-            <p className="text-sm text-muted-foreground mt-4">
-              Without these credentials, the integration will use mock data for testing purposes.
-            </p>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )

@@ -15,9 +15,11 @@ export default function AboutPage() {
               <Shield className="w-12 h-12 text-primary" />
             </div>
             <h1 className="text-5xl font-bold mb-6 text-balance">
-              About <span className="text-primary">AfroSecured</span>
+              About <span className="text-primary">AfroSecured™</span>
             </h1>
-            <p className="text-xl text-muted-foreground text-pretty">Africa's Shield for a Safer Digital World</p>
+            <p className="text-xl text-muted-foreground text-pretty">
+              Enterprise-Grade Digital Trust Infrastructure for Africa and Beyond
+            </p>
           </div>
 
           {/* Main Story */}
@@ -25,36 +27,41 @@ export default function AboutPage() {
             <CardContent className="p-8 md:p-12">
               <div className="prose prose-lg max-w-none">
                 <p className="text-lg leading-relaxed mb-6">
-                  Every day, people around the world, especially across Africa, lose money, data, and confidence to
-                  online scams. From fake investment links and romance frauds to phishing sites that look real, the
-                  problem is not only digital but deeply human. It affects families, businesses, and communities.
+                  Digital fraud costs African businesses and consumers billions annually. From sophisticated phishing
+                  campaigns to mobile money scams, the threat landscape continues to evolve faster than traditional
+                  security solutions can adapt.
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
-                  <span className="font-semibold text-primary">Afrosecured was created to change that reality.</span>
+                  <span className="font-semibold text-primary">
+                    AfroSecured™ delivers real-time threat intelligence and fraud prevention infrastructure designed
+                    specifically for African markets.
+                  </span>
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
-                  Born in Africa and built for the world, it is a community-driven cybersecurity platform that helps
-                  people verify, scan, and understand the safety of websites, messages, and digital transactions with
-                  clarity and confidence.
+                  We aggregate threat data from global sources including Cisco Talos (PhishTank), AlienVault OTX,
+                  VirusTotal, and regional security feeds to provide comprehensive protection against emerging threats.
+                  Our platform processes millions of data points daily to identify and neutralize scams before they
+                  impact users.
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
-                  Our mission is to restore trust in Africa's digital economy and extend that trust globally. We believe
-                  that cybersecurity should be accessible to everyone and that transparency is the key to real
-                  protection.
+                  Built on enterprise-grade infrastructure with offline-first architecture, AfroSecured™ operates
+                  effectively even in low-connectivity environments. We partner with mobile money providers, financial
+                  institutions, and telecommunications companies to deliver network-level fraud prevention at scale.
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
-                  By combining global threat intelligence with African innovation, Afrosecured detects scams faster,
-                  educates communities, and builds awareness through honest, easy-to-understand insights. Each scan
-                  reveals the truth and empowers users to take control of their safety online.
+                  Our B2B API enables fintechs, e-commerce platforms, and payment processors to integrate real-time
+                  fraud scoring, transaction verification, and threat intelligence into their existing systems. We
+                  provide the infrastructure layer that makes digital commerce safer and more trustworthy across the
+                  continent.
                 </p>
 
                 <p className="text-lg leading-relaxed font-semibold text-primary">
-                  Afrosecured believes that Africa can lead the world in redefining digital trust through openness,
-                  education, and community-driven security.
+                  AfroSecured™ is building Africa's digital trust infrastructure through advanced threat intelligence,
+                  machine learning, and strategic partnerships with leading technology providers.
                 </p>
               </div>
             </CardContent>
@@ -67,9 +74,9 @@ export default function AboutPage() {
                 <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
                   <Target className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Accessibility</h3>
+                <h3 className="text-xl font-bold mb-3">Scalability</h3>
                 <p className="text-muted-foreground">
-                  Cybersecurity should be accessible to everyone, not just experts
+                  Enterprise infrastructure designed to protect millions of transactions daily
                 </p>
               </CardContent>
             </Card>
@@ -79,8 +86,10 @@ export default function AboutPage() {
                 <div className="inline-flex items-center justify-center p-3 bg-accent/10 rounded-full mb-4">
                   <Lightbulb className="w-8 h-8 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Transparency</h3>
-                <p className="text-muted-foreground">Honest, easy-to-understand insights with no hidden algorithms</p>
+                <h3 className="text-xl font-bold mb-3">Intelligence</h3>
+                <p className="text-muted-foreground">
+                  Real-time threat data from Cisco Talos, AlienVault, VirusTotal, and regional sources
+                </p>
               </CardContent>
             </Card>
 
@@ -89,8 +98,10 @@ export default function AboutPage() {
                 <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
                   <Users className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Community</h3>
-                <p className="text-muted-foreground">Community-driven security that educates and empowers users</p>
+                <h3 className="text-xl font-bold mb-3">Partnership</h3>
+                <p className="text-muted-foreground">
+                  Strategic integrations with telcos, banks, and payment providers across Africa
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -99,14 +110,15 @@ export default function AboutPage() {
           <Card className="bg-gradient-to-br from-primary/10 via-accent/5 to-background border-primary/20 rounded-2xl">
             <CardContent className="p-8 md:p-12 text-center">
               <Globe className="w-16 h-16 text-primary mx-auto mb-6" />
-              <h2 className="text-3xl font-bold mb-6">Our Vision</h2>
+              <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty leading-relaxed mb-6">
-                To restore trust in Africa's digital economy and extend that trust globally by combining global threat
-                intelligence with African innovation.
+                To provide enterprise-grade fraud prevention infrastructure that enables secure digital commerce across
+                Africa through real-time threat intelligence, machine learning, and strategic partnerships with leading
+                financial and telecommunications providers.
               </p>
               <div className="inline-flex items-center gap-2 text-primary font-semibold">
                 <TrendingUp className="w-5 h-5" />
-                <span>Africa leading the world in digital trust</span>
+                <span>Building Africa's Digital Trust Infrastructure</span>
               </div>
             </CardContent>
           </Card>

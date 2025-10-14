@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Clock, MapPin } from "lucide-react"
+import { useLiveTimestamp } from "@/hooks/use-live-timestamp"
 
 interface Report {
   id: string
@@ -24,16 +25,6 @@ const scamTypeColors = {
 }
 
 export function RecentReports({ reports }: RecentReportsProps) {
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24))
-
-    if (diffInDays === 0) return "Today"
-    if (diffInDays === 1) return "Yesterday"
-    return `${diffInDays}d ago`
-  }
-
   if (reports.length === 0) {
     return (
       <div className="text-center py-4">
@@ -45,25 +36,33 @@ export function RecentReports({ reports }: RecentReportsProps) {
   return (
     <div className="space-y-3">
       {reports.map((report) => (
-        <div key={report.id} className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <Badge variant="secondary" className={scamTypeColors[report.scam_type as keyof typeof scamTypeColors]}>
-              {report.scam_type.replace("_", " ")}
-            </Badge>
-            <div className="flex items-center gap-1 text-xs text-slate-500">
-              <Clock className="w-3 h-3" />
-              {formatTimeAgo(report.created_at)}
-            </div>
-          </div>
-          <h4 className="text-sm font-medium text-white mb-1 line-clamp-2">{report.title}</h4>
-          {report.location && (
-            <div className="flex items-center gap-1 text-xs text-slate-400">
-              <MapPin className="w-3 h-3" />
-              {report.location}
-            </div>
-          )}
-        </div>
+        <ReportCard key={report.id} report={report} />
       ))}
+    </div>
+  )
+}
+
+function ReportCard({ report }: { report: Report }) {
+  const timeAgo = useLiveTimestamp(report.created_at)
+
+  return (
+    <div className="p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <Badge variant="secondary" className={scamTypeColors[report.scam_type as keyof typeof scamTypeColors]}>
+          {report.scam_type.replace("_", " ")}
+        </Badge>
+        <div className="flex items-center gap-1 text-xs text-slate-500">
+          <Clock className="w-3 h-3" />
+          {timeAgo}
+        </div>
+      </div>
+      <h4 className="text-sm font-medium text-white mb-1 line-clamp-2">{report.title}</h4>
+      {report.location && (
+        <div className="flex items-center gap-1 text-xs text-slate-400">
+          <MapPin className="w-3 h-3" />
+          {report.location}
+        </div>
+      )}
     </div>
   )
 }

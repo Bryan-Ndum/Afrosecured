@@ -25,7 +25,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
             <Shield className="w-7 h-7 text-primary" />
-            <span className="text-xl font-bold">AfroSecured</span>
+            <span className="text-xl font-bold">AfroSecured™</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -62,7 +62,7 @@ export function Header() {
             <SheetContent side="right" className="w-72">
               <div className="flex items-center gap-2 mb-8">
                 <Shield className="w-7 h-7 text-primary" />
-                <span className="text-lg font-bold">AfroSecured</span>
+                <span className="text-lg font-bold">AfroSecured™</span>
               </div>
 
               <nav className="flex flex-col gap-2">

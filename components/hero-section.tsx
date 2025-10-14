@@ -29,15 +29,17 @@ export function HeroSection() {
 
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-balance">
           <span className="bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-            Cybersecurity Intelligence Hub
+            AfroSecured™
           </span>
         </h1>
 
-        <p className="text-2xl md:text-3xl font-semibold text-muted-foreground/80 mb-6">Where Safety Meets Trust</p>
+        <p className="text-2xl md:text-3xl font-semibold text-muted-foreground/80 mb-6">
+          Enterprise-Grade Threat Intelligence Platform
+        </p>
 
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty">
-          Afrosecured helps you spot scams, verify links, and protect your digital life with one secured connection at a
-          time.
+          Real-time fraud prevention powered by Cisco Talos PhishTank, AlienVault OTX, and global threat intelligence
+          networks. Protecting businesses and consumers across Africa.
         </p>
 
         <div className="flex justify-center mb-8">
@@ -76,16 +78,16 @@ export function HeroSection() {
 
         <div className="flex flex-wrap justify-center gap-6 mb-8">
           <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
-            <span className="text-2xl font-bold text-primary">AI</span>
-            <span className="text-sm text-muted-foreground">Powered Analysis</span>
+            <span className="text-2xl font-bold text-primary">PhishTank</span>
+            <span className="text-sm text-muted-foreground">Cisco Talos</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
             <span className="text-2xl font-bold text-primary">Real-Time</span>
             <span className="text-sm text-muted-foreground">Threat Detection</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
-            <span className="text-2xl font-bold text-primary">Community</span>
-            <span className="text-sm text-muted-foreground">Driven Protection</span>
+            <span className="text-2xl font-bold text-primary">B2B API</span>
+            <span className="text-sm text-muted-foreground">Enterprise Integration</span>
           </div>
         </div>
 

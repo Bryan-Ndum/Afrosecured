@@ -4,17 +4,20 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
+import { AlertCircle } from "lucide-react"
 
 export default function AIAnalyzerPage() {
   const [input, setInput] = useState("")
   const [analyzing, setAnalyzing] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const analyzeContent = async () => {
     if (!input.trim()) return
 
     setAnalyzing(true)
     setResult(null)
+    setError(null)
 
     try {
       const response = await fetch("/api/tools/ai-analyze", {
@@ -23,11 +26,20 @@ export default function AIAnalyzerPage() {
         body: JSON.stringify({ content: input }),
       })
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Server error: ${response.status}`)
+      }
+
       const data = await response.json()
       setResult(data)
     } catch (error) {
       console.error("[v0] AI analysis error:", error)
-      setResult({ error: "Failed to analyze content" })
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to analyze content. Please check your connection and try again.",
+      )
     } finally {
       setAnalyzing(false)
     }
@@ -100,8 +112,28 @@ export default function AIAnalyzerPage() {
           </Button>
         </Card>
 
+        {error && (
+          <Card className="p-6 mb-6 border-red-500/50 bg-red-500/5">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-500 mb-1">Analysis Failed</h3>
+                <p className="text-sm text-red-500/90">{error}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setError(null)}
+                  className="mt-3 border-red-500/30 hover:bg-red-500/10"
+                >
+                  Dismiss
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
         {/* Results Section */}
-        {result && !result.error && (
+        {result && !error && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Threat Score */}
             <Card className="p-6">
@@ -205,22 +237,6 @@ export default function AIAnalyzerPage() {
               </ul>
             </Card>
           </div>
-        )}
-
-        {result && result.error && (
-          <Card className="p-6 border-red-500/50">
-            <div className="flex items-center gap-3 text-red-500">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span className="font-semibold">{result.error}</span>
-            </div>
-          </Card>
         )}
       </div>
     </main>

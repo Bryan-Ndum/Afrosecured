@@ -87,17 +87,17 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="mailto:info@afrosecured.com" className="hover:text-primary transition-colors">
+                <a href="mailto:afrosecured@gmail.com" className="hover:text-primary transition-colors">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a href="/privacy" className="hover:text-primary transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <a href="/terms" className="hover:text-primary transition-colors">
                   Terms of Service
                 </a>
               </li>
@@ -108,7 +108,7 @@ export function Footer() {
         <div className="border-t border-border/50 mt-8 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-muted-foreground text-sm text-center md:text-left">
-              © AfroSecured 2025. Protecting lives through digital security awareness.
+              © AfroSecured™ 2025. Protecting lives through digital security awareness.
             </p>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <AlertTriangle className="w-4 h-4 text-primary" />

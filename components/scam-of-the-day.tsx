@@ -160,7 +160,7 @@ export function ScamOfTheDay() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 text-balance">
-            <span className="text-destructive">Scam Alert:</span> Today's Threat
+            <span className="text-destructive">Scam Alert:</span> Current Threats
           </h2>
           <p className="text-xl text-muted-foreground">Stay informed about the latest scams targeting our community</p>
           <div className="flex items-center justify-center gap-4 mt-4">

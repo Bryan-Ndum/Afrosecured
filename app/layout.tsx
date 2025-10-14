@@ -4,6 +4,7 @@ import { Inter, Poppins } from "next/font/google"
 import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { CookieConsentBanner } from "@/components/cookie-consent-banner"
 import "./globals.css"
 
 const inter = Inter({
@@ -84,6 +85,7 @@ export default function RootLayout({
         <Header />
         <Suspense fallback={null}>{children}</Suspense>
         <Footer />
+        <CookieConsentBanner />
       </body>
     </html>
   )
