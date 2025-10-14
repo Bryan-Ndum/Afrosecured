@@ -9,6 +9,11 @@ export async function GET(request: Request) {
   const startTime = Date.now()
 
   try {
+    const authHeader = request.headers.get("authorization")
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
     const generator = new AIContentGenerator()
@@ -102,6 +107,21 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error("Daily content generation error:", error)
+
+    try {
+      const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+      await supabase.from("automation_logs").insert({
+        job_name: "generate-daily-content",
+        job_type: "cron",
+        status: "failed",
+        items_processed: 0,
+        items_failed: 1,
+        execution_time_ms: Date.now() - startTime,
+        error_message: error instanceof Error ? error.message : "Unknown error",
+      })
+    } catch (logError) {
+      console.error("Failed to log error:", logError)
+    }
 
     return NextResponse.json(
       {

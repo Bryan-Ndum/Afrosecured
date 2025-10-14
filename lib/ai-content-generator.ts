@@ -9,7 +9,7 @@ export class AIContentGenerator {
     tags: string[]
   }> {
     const result = await generateObject({
-      model: "openai/gpt-4.1",
+      model: "openai/gpt-4o-mini",
       schema: z.object({
         title: z.string().describe("Catchy title for the security tip"),
         content: z.string().describe("Detailed security tip (2-3 paragraphs)"),
@@ -37,7 +37,7 @@ export class AIContentGenerator {
       .join("\n\n")
 
     const result = await generateObject({
-      model: "openai/gpt-4.1",
+      model: "openai/gpt-4o-mini",
       schema: z.object({
         title: z.string(),
         content: z.string().describe("Comprehensive weekly summary (4-5 paragraphs)"),
@@ -74,7 +74,7 @@ Write in clear, accessible language for non-technical users.`,
       .join("\n")
 
     const result = await generateObject({
-      model: "openai/gpt-4.1",
+      model: "openai/gpt-4o-mini",
       schema: z.object({
         title: z.string(),
         content: z.string().describe("Detailed trend analysis"),
@@ -112,7 +112,7 @@ Focus on actionable intelligence for African communities.`,
     shouldPublish: boolean
   }> {
     const result = await generateObject({
-      model: "openai/gpt-4.1",
+      model: "openai/gpt-4o-mini",
       schema: z.object({
         isLegitimate: z.boolean().describe("Is this a legitimate scam report?"),
         confidence: z.number().min(0).max(100),
