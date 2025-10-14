@@ -6,7 +6,7 @@ export default function SecurityToolsPage() {
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Security Tools</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Advanced cybersecurity tools powered by AI and real-time threat intelligence
+            Advanced cybersecurity tools with real-time threat intelligence
           </p>
         </div>
 
@@ -31,7 +31,7 @@ export default function SecurityToolsPage() {
               <h3 className="text-xl font-semibold text-foreground">AI Scam Analyzer</h3>
             </div>
             <p className="text-muted-foreground mb-4">
-              Paste suspicious messages, emails, or texts and get instant AI-powered analysis with threat scoring
+              Paste suspicious messages, emails, or texts and get instant analysis with threat scoring
             </p>
             <div className="flex items-center text-primary text-sm font-medium group-hover:translate-x-1 transition-transform">
               Launch Tool

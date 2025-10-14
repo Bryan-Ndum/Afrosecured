@@ -4,17 +4,20 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
+import { AlertCircle } from "lucide-react"
 
 export default function PhoneLookupPage() {
   const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const lookupPhone = async () => {
     if (!phone.trim()) return
 
     setLoading(true)
     setResult(null)
+    setError(null)
 
     try {
       const response = await fetch("/api/tools/phone-lookup", {
@@ -23,11 +26,20 @@ export default function PhoneLookupPage() {
         body: JSON.stringify({ phone }),
       })
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || `Server error: ${response.status}`)
+      }
+
       const data = await response.json()
       setResult(data)
     } catch (error) {
       console.error("[v0] Phone lookup error:", error)
-      setResult({ error: "Failed to lookup phone number" })
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to lookup phone number. Please check your connection and try again.",
+      )
     } finally {
       setLoading(false)
     }
@@ -51,6 +63,7 @@ export default function PhoneLookupPage() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full"
+                onKeyDown={(e) => e.key === "Enter" && lookupPhone()}
               />
             </div>
             <Button onClick={lookupPhone} disabled={loading || !phone.trim()} className="w-full">
@@ -59,7 +72,27 @@ export default function PhoneLookupPage() {
           </div>
         </Card>
 
-        {result && (
+        {error && (
+          <Card className="p-6 mb-6 border-red-500/50 bg-red-500/5">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="font-semibold text-red-500 mb-1">Lookup Failed</h3>
+                <p className="text-sm text-red-500/90">{error}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setError(null)}
+                  className="mt-3 border-red-500/30 hover:bg-red-500/10"
+                >
+                  Dismiss
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {result && !error && (
           <Card className="p-6">
             {result.error ? (
               <div className="text-red-500">{result.error}</div>

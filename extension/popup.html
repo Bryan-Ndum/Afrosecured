@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 360px;
+      padding: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+    }
+    .header {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      padding: 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .header p {
+      margin: 8px 0 0 0;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+    .content {
+      padding: 20px;
+    }
+    .stat {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-bottom: 4px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      background: rgba(16, 185, 129, 0.2);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🛡️ AfroSecured PayGuard</h1>
+    <p>Real-time payment protection</p>
+  </div>
+  
+  <div class="content">
+    <div class="status">
+      <div class="status-dot"></div>
+      <span>Protection Active</span>
+    </div>
+    
+    <div class="stat">
+      <div class="stat-label">Payments Protected Today</div>
+      <div class="stat-value" id="protected-count">0</div>
+    </div>
+    
+    <div class="stat">
+      <div class="stat-label">Scams Blocked</div>
+      <div class="stat-value" id="blocked-count">0</div>
+    </div>
+    
+    <div class="stat">
+      <div class="stat-label">Money Saved</div>
+      <div class="stat-value" id="saved-amount">$0</div>
+    </div>
+    
+    <button class="btn btn-primary" id="dashboard-btn">
+      Open Dashboard
+    </button>
+    
+    <button class="btn btn-danger" id="freeze-btn">
+      🚨 FREEZE LAST PAYMENT
+    </button>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

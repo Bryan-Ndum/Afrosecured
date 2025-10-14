@@ -3,6 +3,7 @@ import { IntelligenceFeed } from "@/components/intelligence-feed"
 import { TrendingAlerts } from "@/components/trending-alerts"
 import { ScamTypeFilter } from "@/components/scam-type-filter"
 import { Suspense } from "react"
+import { ThreatHeatmap } from "@/components/threat-heatmap"
 
 export default async function IntelPage() {
   const supabase = await createClient()
@@ -43,6 +44,21 @@ export default async function IntelPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Heatmap Section */}
+        <section className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">Global Threat Intelligence Map</h2>
+              <p className="text-slate-400">Real-time visualization of threats across Africa, Europe, and USA</p>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-slate-400">Live Updates</span>
+            </div>
+          </div>
+          <ThreatHeatmap />
+        </section>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Feed */}
           <div className="lg:col-span-3 space-y-6">

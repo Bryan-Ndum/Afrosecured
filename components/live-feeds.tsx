@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ExternalLink, AlertTriangle, Globe, Zap, RefreshCw } from "lucide-react"
 import { useState, useEffect } from "react"
+import { useLiveTimestamp, useLiveTime } from "@/hooks/use-live-timestamp"
 
 interface ScamFeed {
   id: string
@@ -72,6 +73,7 @@ export function LiveFeeds() {
   const [newsFeeds, setNewsFeeds] = useState<ScamFeed[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
+  const currentTime = useLiveTime(1000)
 
   const fetchIntelFeeds = async () => {
     setIsLoading(true)
@@ -105,20 +107,6 @@ export function LiveFeeds() {
     const interval = setInterval(fetchIntelFeeds, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
-
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60))
-
-    if (diffInHours < 1) return "Less than 1 hour ago"
-    if (diffInHours === 1) return "1 hour ago"
-    if (diffInHours < 24) return `${diffInHours} hours ago`
-
-    const diffInDays = Math.floor(diffInHours / 24)
-    if (diffInDays === 1) return "1 day ago"
-    return `${diffInDays} days ago`
-  }
 
   return (
     <section className="py-20 px-4 bg-secondary/10">
@@ -170,31 +158,7 @@ export function LiveFeeds() {
               )
                 .slice(0, 6)
                 .map((feed) => (
-                  <div
-                    key={feed.id}
-                    className="border border-border/50 rounded-lg p-4 hover:border-primary/50 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <AlertTriangle
-                          className={`w-4 h-4 ${feed.severity === "high" ? "text-destructive" : "text-yellow-500"}`}
-                        />
-                        <span className="text-sm text-muted-foreground">{feed.source}</span>
-                      </div>
-                      <Badge variant={feed.severity === "high" ? "destructive" : "secondary"} className="text-xs">
-                        {feed.scam_type}
-                      </Badge>
-                    </div>
-                    <h4 className="font-medium mb-2 text-sm leading-relaxed">{feed.title}</h4>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{formatTimeAgo(feed.created_at)}</span>
-                      {feed.url && (
-                        <a href={feed.url} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-3 h-3 text-muted-foreground hover:text-primary cursor-pointer" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
+                  <SecurityFeedCard key={feed.id} feed={feed} />
                 ))}
 
               <div className="text-center pt-4">
@@ -231,16 +195,7 @@ export function LiveFeeds() {
               )
                 .slice(0, 6)
                 .map((news) => (
-                  <div
-                    key={news.id}
-                    className="border border-border/50 rounded-lg p-4 hover:border-accent/50 transition-colors"
-                  >
-                    <h4 className="font-medium mb-2 text-sm leading-relaxed">{news.title}</h4>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">{news.source}</span>
-                      <span className="text-xs text-muted-foreground">{formatTimeAgo(news.created_at)}</span>
-                    </div>
-                  </div>
+                  <NewsFeedCard key={news.id} news={news} />
                 ))}
 
               {/* Auto-refresh indicator */}
@@ -270,5 +225,46 @@ export function LiveFeeds() {
         </Card>
       </div>
     </section>
+  )
+}
+
+function SecurityFeedCard({ feed }: { feed: ScamFeed }) {
+  const timeAgo = useLiveTimestamp(feed.created_at)
+
+  return (
+    <div className="border border-border/50 rounded-lg p-4 hover:border-primary/50 transition-colors">
+      <div className="flex items-start justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className={`w-4 h-4 ${feed.severity === "high" ? "text-destructive" : "text-yellow-500"}`} />
+          <span className="text-sm text-muted-foreground">{feed.source}</span>
+        </div>
+        <Badge variant={feed.severity === "high" ? "destructive" : "secondary"} className="text-xs">
+          {feed.scam_type}
+        </Badge>
+      </div>
+      <h4 className="font-medium mb-2 text-sm leading-relaxed">{feed.title}</h4>
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{timeAgo}</span>
+        {feed.url && (
+          <a href={feed.url} target="_blank" rel="noopener noreferrer">
+            <ExternalLink className="w-3 h-3 text-muted-foreground hover:text-primary cursor-pointer" />
+          </a>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function NewsFeedCard({ news }: { news: ScamFeed }) {
+  const timeAgo = useLiveTimestamp(news.created_at)
+
+  return (
+    <div className="border border-border/50 rounded-lg p-4 hover:border-accent/50 transition-colors">
+      <h4 className="font-medium mb-2 text-sm leading-relaxed">{news.title}</h4>
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">{news.source}</span>
+        <span className="text-xs text-muted-foreground">{timeAgo}</span>
+      </div>
+    </div>
   )
 }

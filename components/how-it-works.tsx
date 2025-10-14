@@ -13,9 +13,9 @@ export function HowItWorks() {
     },
     {
       icon: Brain,
-      title: "AI-Powered Analysis",
+      title: "Intelligent Analysis",
       description:
-        "Our GPT-4 powered system analyzes the content against known scam patterns, threat databases, and behavioral indicators.",
+        "Our advanced system analyzes the content against known scam patterns, threat databases, and behavioral indicators.",
     },
     {
       icon: Shield,

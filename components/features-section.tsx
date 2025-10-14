@@ -14,7 +14,7 @@ const features = [
   {
     icon: MapPin,
     title: "Localized Fraud Detection",
-    description: "AI-powered detection tailored to African and diaspora-specific scam patterns.",
+    description: "Advanced detection tailored to African and diaspora-specific scam patterns.",
     color: "text-primary",
   },
   {

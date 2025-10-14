@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { MapPin, AlertCircle, Phone, CreditCard, RefreshCw } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { useLiveTime } from "@/hooks/use-live-timestamp"
 
 interface ScamReport {
   id: string
@@ -57,6 +58,7 @@ export function LiveScamMap() {
   const [hotspots, setHotspots] = useState<ScamHotspot[]>(fallbackHotspots)
   const [isLoading, setIsLoading] = useState(false)
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
+  const currentTime = useLiveTime(1000)
 
   const fetchRecentReports = async () => {
     setIsLoading(true)
@@ -127,7 +129,7 @@ export function LiveScamMap() {
           </h2>
           <p className="text-xl text-muted-foreground">Real-time scam activity across Africa and the diaspora</p>
           <div className="flex items-center justify-center gap-4 mt-4">
-            <span className="text-sm text-muted-foreground">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+            <span className="text-sm text-muted-foreground">Last updated: {currentTime.toLocaleTimeString()}</span>
             <Button
               variant="outline"
               size="sm"

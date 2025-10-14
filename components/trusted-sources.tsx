@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import useSWR from "swr"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -18,292 +19,105 @@ import {
   AlertTriangle,
   Shield,
   TrendingUp,
+  Brain,
+  Zap,
+  CheckCircle2,
 } from "lucide-react"
 
 interface Article {
+  id: string
   title: string
   link: string
-  pubDate: string
+  pub_date: string
   description: string
   source: string
   category: string
-  summary?: {
-    riskLevel: string
-    whatHappened: string
-    whoAffected: string
-    howToStaySafe: string[]
+  content: string
+  ai_summary?: string
+  threat_level?: "critical" | "high" | "medium" | "low" | "info"
+  threat_indicators?: string[]
+  affected_platforms?: string[]
+  cve_ids?: string[]
+  iocs?: {
+    ips?: string[]
+    domains?: string[]
+    hashes?: string[]
+    urls?: string[]
   }
-  loadingSummary?: boolean
+  recommendations?: string[]
+  tags?: string[]
+  ai_processed: boolean
+  ai_processed_at?: string
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 export function TrustedSources() {
-  const [articles, setArticles] = useState<Article[]>([])
-  const [loading, setLoading] = useState(false)
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
-  const [showSummaries, setShowSummaries] = useState<{ [key: number]: boolean }>({})
+  const { data, error, isLoading, mutate } = useSWR("/api/articles", fetcher, {
+    refreshInterval: 60000,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+  })
 
-  useEffect(() => {
-    fetchArticles()
-  }, [])
+  const [expandedArticles, setExpandedArticles] = useState<{ [key: string]: boolean }>({})
 
-  const fetchArticles = async () => {
-    setLoading(true)
-    try {
-      const feeds = [
-        {
-          url: "https://krebsonsecurity.com/feed/",
-          source: "Krebs on Security",
-          category: "Investigative Journalism",
-        },
-        {
-          url: "https://feeds.feedburner.com/TheHackersNews",
-          source: "The Hacker News",
-          category: "Breaking News",
-        },
-        {
-          url: "https://www.darkreading.com/rss.xml",
-          source: "Dark Reading",
-          category: "Enterprise Security",
-        },
-        {
-          url: "https://www.bleepingcomputer.com/feed/",
-          source: "BleepingComputer",
-          category: "Technical Analysis",
-        },
-      ]
-
-      const allArticles: Article[] = []
-
-      // Parallel fetching for better performance
-      const fetchPromises = feeds.map(async (feed) => {
-        try {
-          const response = await fetch(
-            `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&api_key=public&count=5`,
-          )
-          const data = await response.json()
-
-          if (data.status === "ok" && data.items) {
-            return data.items.map((item: any) => {
-              const cleanDescription = item.description?.replace(/<[^>]*>/g, "").substring(0, 300) || ""
-
-              return {
-                title: item.title,
-                link: item.link,
-                pubDate: item.pubDate,
-                description: cleanDescription + "...",
-                source: feed.source,
-                category: feed.category,
-              }
-            })
-          }
-        } catch (error) {
-          console.error(`[v0] Error fetching ${feed.source}:`, error)
-        }
-        return []
-      })
-
-      const results = await Promise.all(fetchPromises)
-      results.forEach((feedArticles) => allArticles.push(...feedArticles))
-
-      // Sort by date
-      allArticles.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-
-      setArticles(allArticles.slice(0, 10))
-      setLastUpdated(new Date())
-    } catch (error) {
-      console.error("[v0] Error fetching articles:", error)
-    } finally {
-      setLoading(false)
-    }
+  const handleRefresh = async () => {
+    await mutate()
   }
 
-  const generateSmartSummary = (article: Article): Article["summary"] => {
-    const text = `${article.title} ${article.description}`.toLowerCase()
-
-    // Advanced keyword analysis for risk assessment
-    const criticalKeywords = [
-      "breach",
-      "hacked",
-      "ransomware",
-      "zero-day",
-      "exploit",
-      "malware",
-      "stolen",
-      "leaked",
-      "compromised",
-    ]
-    const highKeywords = ["vulnerability", "attack", "phishing", "scam", "fraud", "threat", "exposed"]
-    const mediumKeywords = ["warning", "alert", "security", "update", "patch", "risk"]
-
-    // Calculate risk level
-    const criticalCount = criticalKeywords.filter((k) => text.includes(k)).length
-    const highCount = highKeywords.filter((k) => text.includes(k)).length
-    const mediumCount = mediumKeywords.filter((k) => text.includes(k)).length
-
-    let riskLevel = "Low"
-    if (criticalCount >= 2) riskLevel = "Critical"
-    else if (criticalCount >= 1 || highCount >= 2) riskLevel = "High"
-    else if (highCount >= 1 || mediumCount >= 2) riskLevel = "Medium"
-
-    // Extract key information using NLP patterns
-    const extractWhatHappened = () => {
-      if (text.includes("breach") || text.includes("hacked")) {
-        const scale = text.includes("million") ? "millions of users" : text.includes("thousand") ? "thousands" : "users"
-        return `A security breach has been detected affecting ${scale}. Sensitive data may have been compromised including personal information and credentials.`
-      }
-      if (text.includes("ransomware")) {
-        return "A ransomware attack has encrypted critical systems, demanding payment for data recovery. Operations may be disrupted."
-      }
-      if (text.includes("phishing") || text.includes("scam")) {
-        return "A sophisticated phishing campaign is targeting users through fake emails and websites to steal credentials and financial information."
-      }
-      if (text.includes("vulnerability") || text.includes("exploit")) {
-        return "A security vulnerability has been discovered that could allow attackers to gain unauthorized access to systems or data."
-      }
-      return "A security incident has been reported that may impact user safety and data protection. Investigation is ongoing."
-    }
-
-    // Identify affected demographics
-    const extractWhoAffected = () => {
-      const groups = []
-      if (text.includes("student") || text.includes("education") || text.includes("scholarship"))
-        groups.push("students and educational institutions")
-      if (text.includes("business") || text.includes("enterprise") || text.includes("company"))
-        groups.push("businesses and enterprises")
-      if (text.includes("consumer") || text.includes("user") || text.includes("customer"))
-        groups.push("general consumers")
-      if (text.includes("africa") || text.includes("nigeria") || text.includes("kenya") || text.includes("ghana"))
-        groups.push("African communities")
-      if (text.includes("romance") || text.includes("dating")) groups.push("individuals seeking relationships")
-
-      if (groups.length === 0) return "General public and online users across all demographics"
-      return groups.join(", ") + " are primarily affected by this threat"
-    }
-
-    // Generate actionable safety tips
-    const generateSafetyTips = (): string[] => {
-      const tips = []
-
-      if (text.includes("password") || text.includes("credential")) {
-        tips.push("Change your passwords immediately and enable two-factor authentication")
-        tips.push("Use unique, strong passwords for each account (12+ characters with mixed case, numbers, symbols)")
-      }
-
-      if (text.includes("email") || text.includes("phishing")) {
-        tips.push("Verify sender email addresses carefully and don't click suspicious links")
-        tips.push("Look for spelling errors, urgent language, and requests for sensitive information")
-      }
-
-      if (text.includes("update") || text.includes("patch")) {
-        tips.push("Install security updates and patches immediately on all devices")
-        tips.push("Enable automatic updates to stay protected against known vulnerabilities")
-      }
-
-      if (text.includes("financial") || text.includes("payment") || text.includes("money")) {
-        tips.push("Monitor your bank statements and credit reports for unauthorized transactions")
-        tips.push("Never share financial information via email or unsecured channels")
-      }
-
-      if (text.includes("social") || text.includes("romance") || text.includes("dating")) {
-        tips.push("Be skeptical of online relationships that quickly become romantic or request money")
-        tips.push("Never send money or gift cards to someone you haven't met in person")
-      }
-
-      // Default tips if none specific
-      if (tips.length === 0) {
-        tips.push("Stay vigilant and verify information from official sources before taking action")
-        tips.push("Report suspicious activity to relevant authorities and security teams")
-        tips.push("Keep your software and security tools up to date")
-      }
-
-      return tips.slice(0, 4) // Return max 4 tips
-    }
-
-    return {
-      riskLevel,
-      whatHappened: extractWhatHappened(),
-      whoAffected: extractWhoAffected(),
-      howToStaySafe: generateSafetyTips(),
-    }
+  const toggleArticle = (articleId: string) => {
+    setExpandedArticles((prev) => ({ ...prev, [articleId]: !prev[articleId] }))
   }
 
-  const fetchAISummary = async (article: Article, index: number) => {
-    const isCurrentlyShown = showSummaries[index]
-
-    // If already has summary, just toggle visibility
-    if (article.summary) {
-      setShowSummaries((prev) => ({ ...prev, [index]: !prev[index] }))
-      return
-    }
-
-    // If hiding (was shown but no summary yet), just toggle
-    if (isCurrentlyShown) {
-      setShowSummaries((prev) => ({ ...prev, [index]: false }))
-      return
-    }
-
-    // Generate new summary
-    setShowSummaries((prev) => ({ ...prev, [index]: true }))
-    setArticles((prev) => prev.map((a, i) => (i === index ? { ...a, loadingSummary: true } : a)))
-
-    // Simulate processing time for better UX (AI feels more "real")
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    // Generate summary using client-side algorithm
-    const summary = generateSmartSummary(article)
-
-    setArticles((prev) =>
-      prev.map((a, i) =>
-        i === index
-          ? {
-              ...a,
-              summary,
-              loadingSummary: false,
-            }
-          : a,
-      ),
-    )
-  }
-
-  const getRiskColor = (risk?: string) => {
-    switch (risk?.toLowerCase()) {
+  const getThreatLevelColor = (level?: string) => {
+    switch (level) {
       case "critical":
+        return "bg-red-600/10 border-red-600/30 text-red-600"
       case "high":
-        return "bg-red-500/10 border-red-500/30 text-red-600"
+        return "bg-orange-500/10 border-orange-500/30 text-orange-600"
       case "medium":
         return "bg-yellow-500/10 border-yellow-500/30 text-yellow-600"
       case "low":
-        return "bg-green-500/10 border-green-500/30 text-green-600"
+        return "bg-blue-500/10 border-blue-500/30 text-blue-600"
+      case "info":
+        return "bg-gray-500/10 border-gray-500/30 text-gray-600"
       default:
         return "bg-secondary"
     }
   }
 
-  const getRiskBorderColor = (risk?: string) => {
-    switch (risk?.toLowerCase()) {
+  const getThreatBorderColor = (level?: string) => {
+    switch (level) {
       case "critical":
+        return "border-l-red-600"
       case "high":
-        return "border-l-red-500"
+        return "border-l-orange-500"
       case "medium":
         return "border-l-yellow-500"
       case "low":
-        return "border-l-green-500"
+        return "border-l-blue-500"
+      case "info":
+        return "border-l-gray-500"
       default:
         return "border-l-primary"
     }
   }
 
+  const articles: Article[] = data?.articles || []
+  const aiProcessedCount = articles.filter((a) => a.ai_processed).length
+
   return (
     <section className="py-16 px-4 bg-secondary/10">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4">Trusted Intelligence Sources</h2>
+          <h2 className="text-4xl font-bold mb-4">Advanced Threat Intelligence</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-            Real-time updates from verified cybersecurity sources with AI-powered threat analysis
+            Real-time cybersecurity updates with machine learning-powered threat analysis, risk assessment, and
+            actionable recommendations
           </p>
-          <div className="flex items-center justify-center gap-4">
-            <Button onClick={fetchArticles} disabled={loading} size="lg" className="gap-2">
-              {loading ? (
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Button onClick={handleRefresh} disabled={isLoading} size="lg" className="gap-2">
+              {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   Refreshing...
@@ -315,8 +129,20 @@ export function TrustedSources() {
                 </>
               )}
             </Button>
-            {lastUpdated && (
-              <span className="text-sm text-muted-foreground">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+            {data?.lastUpdated && (
+              <span className="text-sm text-muted-foreground">
+                Last updated: {new Date(data.lastUpdated).toLocaleTimeString()}
+              </span>
+            )}
+            <Badge variant="outline" className="gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Auto-updates every hour
+            </Badge>
+            {aiProcessedCount > 0 && (
+              <Badge variant="outline" className="gap-2 bg-primary/5">
+                <Brain className="w-4 h-4 text-primary" />
+                {aiProcessedCount} AI-analyzed
+              </Badge>
             )}
           </div>
         </div>
@@ -395,38 +221,62 @@ export function TrustedSources() {
           </Card>
         </div>
 
-        {/* Live Articles Feed with AI Summaries */}
         {articles.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold">Latest Security Updates</h3>
               <Badge variant="outline" className="gap-2">
                 <Sparkles className="w-4 h-4" />
-                AI-Powered Analysis
+                GPT-4 Powered Analysis
               </Badge>
             </div>
-            {articles.map((article, index) => (
+            {articles.map((article) => (
               <Card
-                key={index}
-                className={`p-6 hover:shadow-lg transition-shadow border-l-4 rounded-2xl ${getRiskBorderColor(article.summary?.riskLevel)}`}
+                key={article.id}
+                className={`p-6 hover:shadow-lg transition-shadow border-l-4 rounded-2xl ${getThreatBorderColor(article.threat_level)}`}
               >
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
                         <Badge variant="outline">{article.category}</Badge>
-                        {article.summary?.riskLevel && (
-                          <Badge className={getRiskColor(article.summary.riskLevel)}>
-                            {article.summary.riskLevel.toUpperCase()} RISK
+                        {article.threat_level && (
+                          <Badge className={getThreatLevelColor(article.threat_level)}>
+                            <AlertTriangle className="w-3 h-3 mr-1" />
+                            {article.threat_level.toUpperCase()}
+                          </Badge>
+                        )}
+                        {article.ai_processed && (
+                          <Badge variant="outline" className="gap-1 bg-primary/5">
+                            <Brain className="w-3 h-3" />
+                            AI Analyzed
                           </Badge>
                         )}
                         <span className="text-xs text-muted-foreground">
-                          {new Date(article.pubDate).toLocaleDateString()} •{" "}
-                          {new Date(article.pubDate).toLocaleTimeString()}
+                          {new Date(article.pub_date).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}{" "}
+                          at{" "}
+                          {new Date(article.pub_date).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
                         </span>
                       </div>
                       <h4 className="font-semibold text-lg mb-2">{article.title}</h4>
-                      <p className="text-sm text-muted-foreground mb-3">{article.description}</p>
+                      <p className="text-sm text-muted-foreground mb-3">{article.ai_summary || article.description}</p>
+                      {article.tags && article.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {article.tags.slice(0, 5).map((tag) => (
+                            <Badge key={tag} variant="secondary" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                       <p className="text-xs text-muted-foreground">Source: {article.source}</p>
                     </div>
                     <div className="flex flex-col gap-2 flex-shrink-0">
@@ -436,84 +286,199 @@ export function TrustedSources() {
                           <ExternalLink className="w-4 h-4 ml-2" />
                         </a>
                       </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => fetchAISummary(article, index)}
-                        disabled={article.loadingSummary}
-                        className="gap-2"
-                      >
-                        {article.loadingSummary ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Analyzing...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="w-4 h-4" />
-                            {showSummaries[index] ? "Hide" : "AI Summary"}
-                          </>
-                        )}
-                      </Button>
+                      {article.ai_processed && (
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => toggleArticle(article.id)}
+                          className="gap-2"
+                        >
+                          <Zap className="w-4 h-4" />
+                          {expandedArticles[article.id] ? "Hide" : "View"} Intelligence
+                        </Button>
+                      )}
                     </div>
                   </div>
 
-                  {showSummaries[index] && article.summary && (
+                  {expandedArticles[article.id] && article.ai_processed && (
                     <div className="mt-4 p-6 bg-gradient-to-br from-primary/5 to-accent/5 rounded-xl border border-primary/20">
-                      <div className="flex items-start gap-3 mb-4">
+                      <div className="flex items-start gap-3 mb-6">
                         <div className="p-2 bg-primary/10 rounded-lg">
-                          <Sparkles className="w-5 h-5 text-primary" />
+                          <Brain className="w-5 h-5 text-primary" />
                         </div>
                         <div className="flex-1">
                           <h5 className="font-semibold mb-1 flex items-center gap-2">
-                            AI-Powered Threat Analysis
-                            <Badge className={getRiskColor(article.summary.riskLevel)} variant="outline">
-                              {article.summary.riskLevel}
-                            </Badge>
+                            AI Threat Intelligence Report
+                            {article.threat_level && (
+                              <Badge className={getThreatLevelColor(article.threat_level)} variant="outline">
+                                {article.threat_level.toUpperCase()} THREAT
+                              </Badge>
+                            )}
                           </h5>
                           <p className="text-xs text-muted-foreground">
-                            Analyzed using advanced natural language processing
+                            Analyzed by GPT-4 •{" "}
+                            {article.ai_processed_at
+                              ? new Date(article.ai_processed_at).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }) +
+                                " at " +
+                                new Date(article.ai_processed_at).toLocaleTimeString("en-US", {
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
+                              : "Recently"}
                           </p>
                         </div>
                       </div>
 
-                      <div className="space-y-4">
-                        <div>
-                          <h6 className="font-medium text-sm mb-2 flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4 text-red-500" />
-                            What Happened
-                          </h6>
-                          <p className="text-sm text-muted-foreground pl-6">{article.summary.whatHappened}</p>
-                        </div>
+                      <div className="space-y-6">
+                        {/* Threat Indicators */}
+                        {article.threat_indicators && article.threat_indicators.length > 0 && (
+                          <div>
+                            <h6 className="font-medium text-sm mb-3 flex items-center gap-2">
+                              <AlertTriangle className="w-4 h-4 text-red-500" />
+                              Threat Indicators
+                            </h6>
+                            <ul className="space-y-2 pl-6">
+                              {article.threat_indicators.map((indicator, i) => (
+                                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                  <span className="text-red-500 mt-0.5">⚠</span>
+                                  <span>{indicator}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-                        <div>
-                          <h6 className="font-medium text-sm mb-2 flex items-center gap-2">
-                            <Users className="w-4 h-4 text-yellow-500" />
-                            Who's Affected
-                          </h6>
-                          <p className="text-sm text-muted-foreground pl-6">{article.summary.whoAffected}</p>
-                        </div>
+                        {/* Affected Platforms */}
+                        {article.affected_platforms && article.affected_platforms.length > 0 && (
+                          <div>
+                            <h6 className="font-medium text-sm mb-3 flex items-center gap-2">
+                              <TrendingUp className="w-4 h-4 text-orange-500" />
+                              Affected Platforms
+                            </h6>
+                            <div className="flex flex-wrap gap-2 pl-6">
+                              {article.affected_platforms.map((platform) => (
+                                <Badge key={platform} variant="outline" className="bg-orange-500/5">
+                                  {platform}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
-                        <div>
-                          <h6 className="font-medium text-sm mb-2 flex items-center gap-2">
-                            <Shield className="w-4 h-4 text-green-500" />
-                            How to Stay Safe
-                          </h6>
-                          <ul className="space-y-2 pl-6">
-                            {article.summary.howToStaySafe.map((tip, i) => (
-                              <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                                <span className="text-green-500 mt-0.5">✓</span>
-                                <span>{tip}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                        {/* CVE IDs */}
+                        {article.cve_ids && article.cve_ids.length > 0 && (
+                          <div>
+                            <h6 className="font-medium text-sm mb-3 flex items-center gap-2">
+                              <Database className="w-4 h-4 text-purple-500" />
+                              CVE Identifiers
+                            </h6>
+                            <div className="flex flex-wrap gap-2 pl-6">
+                              {article.cve_ids.map((cve) => (
+                                <Badge key={cve} variant="outline" className="bg-purple-500/5 font-mono text-xs">
+                                  <a
+                                    href={`https://nvd.nist.gov/vuln/detail/${cve}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:underline"
+                                  >
+                                    {cve}
+                                  </a>
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Indicators of Compromise */}
+                        {article.iocs &&
+                          (article.iocs.ips?.length ||
+                            article.iocs.domains?.length ||
+                            article.iocs.hashes?.length ||
+                            article.iocs.urls?.length) && (
+                            <div>
+                              <h6 className="font-medium text-sm mb-3 flex items-center gap-2">
+                                <Sparkles className="w-4 h-4 text-yellow-500" />
+                                Indicators of Compromise (IOCs)
+                              </h6>
+                              <div className="space-y-3 pl-6">
+                                {article.iocs.ips && article.iocs.ips.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-medium text-muted-foreground mb-1">Malicious IPs:</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {article.iocs.ips.map((ip) => (
+                                        <code
+                                          key={ip}
+                                          className="text-xs bg-red-500/10 px-2 py-1 rounded border border-red-500/20"
+                                        >
+                                          {ip}
+                                        </code>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {article.iocs.domains && article.iocs.domains.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-medium text-muted-foreground mb-1">Malicious Domains:</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {article.iocs.domains.map((domain) => (
+                                        <code
+                                          key={domain}
+                                          className="text-xs bg-red-500/10 px-2 py-1 rounded border border-red-500/20"
+                                        >
+                                          {domain}
+                                        </code>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {article.iocs.hashes && article.iocs.hashes.length > 0 && (
+                                  <div>
+                                    <p className="text-xs font-medium text-muted-foreground mb-1">File Hashes:</p>
+                                    <div className="flex flex-wrap gap-1">
+                                      {article.iocs.hashes.map((hash) => (
+                                        <code
+                                          key={hash}
+                                          className="text-xs bg-red-500/10 px-2 py-1 rounded border border-red-500/20 font-mono"
+                                        >
+                                          {hash.substring(0, 16)}...
+                                        </code>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                        {/* Security Recommendations */}
+                        {article.recommendations && article.recommendations.length > 0 && (
+                          <div>
+                            <h6 className="font-medium text-sm mb-3 flex items-center gap-2">
+                              <Shield className="w-4 h-4 text-green-500" />
+                              Security Recommendations
+                            </h6>
+                            <ul className="space-y-2 pl-6">
+                              {article.recommendations.map((rec, i) => (
+                                <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                                  <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                  <span>{rec}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2 text-xs text-muted-foreground pt-4 mt-4 border-t border-border/50">
                         <AlertTriangle className="w-3 h-3" />
                         <span>
-                          AI analysis provides quick insights. Always verify critical information from official sources.
+                          AI-extracted intelligence from article content. Always verify critical information from
+                          official sources.
                         </span>
                       </div>
                     </div>

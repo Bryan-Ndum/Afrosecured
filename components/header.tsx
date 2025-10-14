@@ -10,22 +10,21 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   const navItems = [
-    { href: "/tools", label: "Security Tools" },
-    { href: "/intel", label: "Intelligence Feed" },
-    { href: "/social", label: "Social Monitoring" },
-    { href: "/report", label: "Report Scam" },
-    { href: "/digest", label: "Weekly Digest" },
-    { href: "/visa-verification", label: "Visa Verification" },
+    { href: "/mobile-money-guardian", label: "Mobile Money Guardian" },
+    { href: "/offline", label: "Offline-First" },
+    { href: "/vision", label: "Vision" },
+    { href: "/intel", label: "Intelligence" },
+    { href: "/tools", label: "Tools" },
     { href: "/about", label: "About" },
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <Shield className="w-7 h-7 text-primary" />
-            <span className="text-xl font-bold">AfroSecured</span>
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Shield className="w-6 h-6 text-primary" />
+            <span className="text-lg font-bold">AfroSecured™</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -34,7 +33,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-md transition-colors"
+                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-card"
               >
                 {item.label}
               </Link>
@@ -43,12 +42,8 @@ export function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <Button
-              size="sm"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              Join Waitlist
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full" asChild>
+              <Link href="/tools">Get Started</Link>
             </Button>
           </div>
 
@@ -62,7 +57,7 @@ export function Header() {
             <SheetContent side="right" className="w-72">
               <div className="flex items-center gap-2 mb-8">
                 <Shield className="w-7 h-7 text-primary" />
-                <span className="text-lg font-bold">AfroSecured</span>
+                <span className="text-lg font-bold">AfroSecured™</span>
               </div>
 
               <nav className="flex flex-col gap-2">
