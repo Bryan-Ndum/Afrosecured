@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation" // Added useRouter to refresh page data after subscription
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,6 +21,7 @@ const categories = [
 ]
 
 export function DigestSignup() {
+  const router = useRouter() // Added router to refresh page after subscription
   const [email, setEmail] = useState("")
   const [selectedCategories, setSelectedCategories] = useState<string[]>(["all"])
   const [frequency, setFrequency] = useState("weekly")
@@ -56,6 +58,8 @@ export function DigestSignup() {
       setSubmitStatus("success")
       setEmail("")
       setSelectedCategories(["all"])
+
+      router.refresh()
     } catch (error) {
       console.error("Error subscribing:", error)
       setSubmitStatus("error")
