@@ -50,13 +50,32 @@ interface Article {
   ai_processed_at?: string
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+const fetcher = async (url: string) => {
+  const res = await fetch(url)
+
+  // If response is not OK, throw an error with the status
+  if (!res.ok) {
+    throw new Error(`API error: ${res.status} ${res.statusText}`)
+  }
+
+  // Check if response is JSON before parsing
+  const contentType = res.headers.get("content-type")
+  if (!contentType || !contentType.includes("application/json")) {
+    throw new Error("Response is not JSON")
+  }
+
+  return res.json()
+}
 
 export function TrustedSources() {
   const { data, error, isLoading, mutate } = useSWR("/api/articles", fetcher, {
     refreshInterval: 60000,
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
+    fallbackData: { articles: [], lastUpdated: new Date().toISOString() },
+    onError: (err) => {
+      console.error("[v0] Error fetching articles:", err)
+    },
   })
 
   const [expandedArticles, setExpandedArticles] = useState<{ [key: string]: boolean }>({})

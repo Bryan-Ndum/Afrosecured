@@ -30,6 +30,12 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (request.nextUrl.pathname.startsWith("/admin")) {
+    // Allow setup page without authentication
+    if (request.nextUrl.pathname === "/admin/setup") {
+      return supabaseResponse
+    }
+
+    // All other admin routes require authentication
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = "/auth/login"
