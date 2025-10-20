@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent } from "@/components/ui/card"
-import { Upload, X, AlertCircle, CheckCircle } from "lucide-react"
+import { Upload, X, AlertCircle, CheckCircle, ImageIcon, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
 const scamTypes = [
@@ -33,6 +33,7 @@ export function ReportForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
+  const [uploadingImages, setUploadingImages] = useState<boolean[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,6 +71,61 @@ export function ReportForm() {
       setErrorMessage(error instanceof Error ? error.message : "Failed to submit report")
     } finally {
       setIsSubmitting(false)
+    }
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      setErrorMessage("Only image files are allowed")
+      return
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMessage("Image size must be less than 5MB")
+      return
+    }
+
+    try {
+      // Set uploading state
+      setUploadingImages((prev) => {
+        const newState = [...prev]
+        newState[index] = true
+        return newState
+      })
+
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const response = await fetch("/api/upload-evidence", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || "Upload failed")
+      }
+
+      const data = await response.json()
+
+      // Update evidence URL with uploaded image URL
+      updateEvidenceUrl(index, data.url)
+      setErrorMessage("")
+    } catch (error) {
+      console.error("Upload error:", error)
+      setErrorMessage(error instanceof Error ? error.message : "Failed to upload image")
+    } finally {
+      // Clear uploading state
+      setUploadingImages((prev) => {
+        const newState = [...prev]
+        newState[index] = false
+        return newState
+      })
     }
   }
 
@@ -210,26 +266,60 @@ export function ReportForm() {
       <div className="space-y-4">
         <h3 className="text-lg font-medium text-white">Evidence (Optional)</h3>
         <p className="text-sm text-slate-400">
-          Add URLs to screenshots, documents, or other evidence. Do not include personal information.
+          Upload screenshots or images as evidence. You can also add URLs to external evidence.
         </p>
 
         {formData.evidenceUrls.map((url, index) => (
-          <div key={index} className="flex gap-2">
-            <Input
-              value={url}
-              onChange={(e) => updateEvidenceUrl(index, e.target.value)}
-              placeholder="https://example.com/screenshot.png"
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={() => removeEvidenceUrl(index)}
-              className="border-slate-700 hover:border-red-500 hover:text-red-400"
-            >
-              <X className="w-4 h-4" />
-            </Button>
+          <div key={index} className="space-y-2">
+            <div className="flex gap-2">
+              <Input
+                value={url}
+                onChange={(e) => updateEvidenceUrl(index, e.target.value)}
+                placeholder="https://example.com/screenshot.png or upload image below"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => removeEvidenceUrl(index)}
+                className="border-slate-700 hover:border-red-500 hover:text-red-400"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            <div className="flex items-center gap-2">
+              <Label
+                htmlFor={`image-upload-${index}`}
+                className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-slate-800 border border-slate-700 rounded-md hover:bg-slate-700 transition-colors text-sm text-slate-300"
+              >
+                {uploadingImages[index] ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <ImageIcon className="w-4 h-4" />
+                    Upload Image
+                  </>
+                )}
+              </Label>
+              <Input
+                id={`image-upload-${index}`}
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, index)}
+                className="hidden"
+                disabled={uploadingImages[index]}
+              />
+              {url && url.startsWith("http") && (
+                <span className="text-xs text-green-400 flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" />
+                  Image uploaded
+                </span>
+              )}
+            </div>
           </div>
         ))}
 
@@ -240,7 +330,7 @@ export function ReportForm() {
           className="border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 bg-transparent"
         >
           <Upload className="w-4 h-4 mr-2" />
-          Add Evidence URL
+          Add Evidence
         </Button>
       </div>
 

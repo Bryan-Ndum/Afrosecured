@@ -3,6 +3,9 @@ import { DigestPreview } from "@/components/digest-preview"
 import { DigestStats } from "@/components/digest-stats"
 import { createClient } from "@/lib/supabase/server"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export default async function DigestPage() {
   const supabase = await createClient()
 

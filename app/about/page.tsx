@@ -40,10 +40,9 @@ export default function AboutPage() {
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
-                  We aggregate threat data from global sources including Cisco Talos (PhishTank), AlienVault OTX,
-                  VirusTotal, and regional security feeds to provide comprehensive protection against emerging threats.
-                  Our platform processes millions of data points daily to identify and neutralize scams before they
-                  impact users.
+                  We aggregate threat data from global sources including AlienVault OTX, VirusTotal, and regional
+                  security feeds to provide comprehensive protection against emerging threats. Our platform processes
+                  millions of data points daily to identify and neutralize scams before they impact users.
                 </p>
 
                 <p className="text-lg leading-relaxed mb-6">
@@ -88,7 +87,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Intelligence</h3>
                 <p className="text-muted-foreground">
-                  Real-time threat data from Cisco Talos, AlienVault, VirusTotal, and regional sources
+                  Real-time threat data from AlienVault, VirusTotal, and regional sources
                 </p>
               </CardContent>
             </Card>

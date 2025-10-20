@@ -5,11 +5,21 @@ import { ScamTypeFilter } from "@/components/scam-type-filter"
 import { Suspense } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Calendar, Shield } from "lucide-react"
+import { ExternalLink, Calendar, Shield, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
-export default async function IntelPage() {
+export const dynamic = "force-dynamic"
+
+export default async function IntelPage({
+  searchParams,
+}: {
+  searchParams: { page?: string; search?: string }
+}) {
   const supabase = await createClient()
+  const currentPage = Number.parseInt(searchParams.page || "1")
+  const searchQuery = searchParams.search || ""
+  const itemsPerPage = 20
 
   // Fetch trending scam feeds
   const { data: trendingFeeds } = await supabase
@@ -29,18 +39,32 @@ export default async function IntelPage() {
   const sevenDaysAgo = new Date()
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
-  const { data: recentArticles } = await supabase
+  let recentQuery = supabase
     .from("cybersecurity_articles")
-    .select("*")
+    .select("*", { count: "exact" })
     .gte("pub_date", sevenDaysAgo.toISOString())
     .order("pub_date", { ascending: false })
 
-  const { data: archiveArticles } = await supabase
+  let archiveQuery = supabase
     .from("cybersecurity_articles")
-    .select("*")
+    .select("*", { count: "exact" })
     .lt("pub_date", sevenDaysAgo.toISOString())
     .order("pub_date", { ascending: false })
-    .limit(50)
+
+  // Add search filter if query exists
+  if (searchQuery) {
+    recentQuery = recentQuery.or(`title.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
+    archiveQuery = archiveQuery.or(`title.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
+  }
+
+  // Add pagination for archive
+  const offset = (currentPage - 1) * itemsPerPage
+  archiveQuery = archiveQuery.range(offset, offset + itemsPerPage - 1)
+
+  const { data: recentArticles } = await recentQuery
+  const { data: archiveArticles, count: totalArchiveCount } = await archiveQuery
+
+  const totalPages = Math.ceil((totalArchiveCount || 0) / itemsPerPage)
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -78,7 +102,27 @@ export default async function IntelPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-white mb-4">Scam Reports & Articles</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-white">Scam Reports & Articles</h2>
+                <Link href="/admin/articles">
+                  <Button variant="outline" size="sm" className="border-slate-700 text-slate-300 bg-transparent">
+                    Add Article
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="mb-4">
+                <form action="/intel" method="get">
+                  <input
+                    type="text"
+                    name="search"
+                    defaultValue={searchQuery}
+                    placeholder="Search articles..."
+                    className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-slate-700"
+                  />
+                </form>
+              </div>
+
               <Tabs defaultValue="recent" className="w-full">
                 <TabsList className="grid w-full max-w-md grid-cols-2 bg-slate-900 border border-slate-800">
                   <TabsTrigger value="recent" className="data-[state=active]:bg-slate-800">
@@ -94,16 +138,54 @@ export default async function IntelPage() {
                     recentArticles.map((article) => <ArticleCard key={article.id} article={article} />)
                   ) : (
                     <div className="text-slate-400 text-center py-8">
-                      No recent articles found. Check back soon for updates.
+                      {searchQuery
+                        ? "No articles found matching your search."
+                        : "No recent articles found. Check back soon for updates."}
                     </div>
                   )}
                 </TabsContent>
 
                 <TabsContent value="archive" className="mt-6 space-y-4">
                   {archiveArticles && archiveArticles.length > 0 ? (
-                    archiveArticles.map((article) => <ArticleCard key={article.id} article={article} />)
+                    <>
+                      {archiveArticles.map((article) => (
+                        <ArticleCard key={article.id} article={article} />
+                      ))}
+
+                      {totalPages > 1 && (
+                        <div className="flex items-center justify-center gap-2 mt-8">
+                          <Link
+                            href={`/intel?page=${currentPage - 1}${searchQuery ? `&search=${searchQuery}` : ""}`}
+                            className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                          >
+                            <Button variant="outline" size="sm" disabled={currentPage <= 1}>
+                              <ChevronLeft className="w-4 h-4 mr-1" />
+                              Previous
+                            </Button>
+                          </Link>
+
+                          <span className="text-slate-400 text-sm px-4">
+                            Page {currentPage} of {totalPages}
+                          </span>
+
+                          <Link
+                            href={`/intel?page=${currentPage + 1}${searchQuery ? `&search=${searchQuery}` : ""}`}
+                            className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                          >
+                            <Button variant="outline" size="sm" disabled={currentPage >= totalPages}>
+                              Next
+                              <ChevronRight className="w-4 h-4 ml-1" />
+                            </Button>
+                          </Link>
+                        </div>
+                      )}
+                    </>
                   ) : (
-                    <div className="text-slate-400 text-center py-8">No archived articles available.</div>
+                    <div className="text-slate-400 text-center py-8">
+                      {searchQuery
+                        ? "No archived articles found matching your search."
+                        : "No archived articles available."}
+                    </div>
                   )}
                 </TabsContent>
               </Tabs>

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, AlertTriangle, Globe, Zap, RefreshCw } from "lucide-react"
+import { ExternalLink, AlertTriangle, Globe, Zap, RefreshCw } from 'lucide-react'
 import { useState, useEffect } from "react"
 import { useLiveTimestamp, useLiveTime } from "@/hooks/use-live-timestamp"
 
@@ -218,7 +218,7 @@ export function LiveFeeds() {
           <CardContent className="p-6 text-center">
             <h3 className="text-lg font-semibold mb-2">Powered by Trusted Sources</h3>
             <p className="text-muted-foreground text-sm">
-              Our feeds integrate with BBC Scam Watch, FTC Consumer Alerts, Google Safe Browsing, PhishTank, and African
+              Our feeds integrate with BBC Scam Watch, FTC Consumer Alerts, Google Safe Browsing, and African
               telecom security advisories for comprehensive coverage.
             </p>
           </CardContent>

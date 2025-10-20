@@ -75,7 +75,7 @@ export default function RootLayout({
               contactPoint: {
                 "@type": "ContactPoint",
                 contactType: "Customer Support",
-                email: "support@afrosecured.com",
+                email: "afrosecured@gmail.com",
               },
             }),
           }}

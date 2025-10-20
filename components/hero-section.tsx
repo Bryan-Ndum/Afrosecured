@@ -38,8 +38,8 @@ export function HeroSection() {
         </p>
 
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty">
-          Real-time fraud prevention powered by Cisco Talos PhishTank, AlienVault OTX, and global threat intelligence
-          networks. Protecting businesses and consumers across Africa.
+          Real-time fraud prevention powered by AlienVault OTX, VirusTotal, and global threat intelligence networks.
+          Protecting businesses and consumers across Africa.
         </p>
 
         <div className="flex justify-center mb-8">
@@ -78,8 +78,8 @@ export function HeroSection() {
 
         <div className="flex flex-wrap justify-center gap-6 mb-8">
           <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
-            <span className="text-2xl font-bold text-primary">PhishTank</span>
-            <span className="text-sm text-muted-foreground">Cisco Talos</span>
+            <span className="text-2xl font-bold text-primary">AlienVault</span>
+            <span className="text-sm text-muted-foreground">Threat Intelligence</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg">
             <span className="text-2xl font-bold text-primary">Real-Time</span>

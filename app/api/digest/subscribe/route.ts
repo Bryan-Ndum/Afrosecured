@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 
 export async function POST(request: Request) {
   try {
@@ -36,6 +37,8 @@ export async function POST(request: Request) {
       console.error("Database error:", error)
       return NextResponse.json({ error: "Failed to subscribe" }, { status: 500 })
     }
+
+    revalidatePath("/digest")
 
     return NextResponse.json({ success: true, data })
   } catch (error) {
