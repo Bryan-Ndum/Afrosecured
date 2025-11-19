@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
 
+export const dynamic = "force-dynamic"
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
@@ -20,11 +22,7 @@ export async function GET(request: Request) {
       query = query.eq("severity", severity)
     }
 
-    const { data, error } = await supabase
-      .from("threat_indicators")
-      .select("*")
-      .order("last_seen", { ascending: false })
-      .limit(limit)
+    const { data, error } = await query
 
     if (error) {
       throw error

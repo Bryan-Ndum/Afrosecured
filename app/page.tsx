@@ -1,5 +1,7 @@
 import { HeroSection } from "@/components/hero-section"
 import { TodayThreat } from "@/components/today-threat"
+import { RecentScamAlerts } from "@/components/recent-scam-alerts"
+import { TrustFramework } from "@/components/trust-framework"
 import { SecurityIntegrations } from "@/components/security-integrations"
 import { HowItWorks } from "@/components/how-it-works"
 import { TrustedSources } from "@/components/trusted-sources"
@@ -14,6 +16,8 @@ export default function HomePage() {
     <main className="min-h-screen bg-background">
       <HeroSection />
       <TodayThreat />
+      <RecentScamAlerts />
+      <TrustFramework />
       <SecurityIntegrations />
       <HowItWorks />
       <TrustedSources />

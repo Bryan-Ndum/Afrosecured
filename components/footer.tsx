@@ -1,4 +1,4 @@
-import { Shield, Twitter, Linkedin, Mail, BookOpen, AlertTriangle } from "lucide-react"
+import { Shield, Twitter, Linkedin, Mail, BookOpen, AlertTriangle, Building2 } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -9,12 +9,18 @@ export function Footer() {
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <Shield className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold">AfroSecured</span>
+              <span className="text-2xl font-bold">AfroSecured™</span>
             </div>
-            <p className="text-muted-foreground mb-6 text-sm text-pretty">
+            <p className="text-muted-foreground mb-4 text-sm text-pretty">
               Protecting Africans and the diaspora from online scams, phishing, and fraud. Building a safer digital
               future for our global community.
             </p>
+            <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
+              <Building2 className="w-4 h-4 text-primary" />
+              <p>
+                A security initiative by <span className="font-semibold text-foreground">Zegs Group LLC</span>, North Carolina
+              </p>
+            </div>
             <div className="flex items-center gap-4">
               <a
                 href="https://twitter.com/afrosecured"

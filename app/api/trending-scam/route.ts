@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 
+export const dynamic = "force-dynamic"
+
 const fallbackScam = {
   id: "fallback",
   title: "Organized Crime Rings Target International Students",
