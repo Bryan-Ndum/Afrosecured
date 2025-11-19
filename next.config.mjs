@@ -11,8 +11,16 @@ const nextConfig = {
   },
   output: 'standalone',
   experimental: {
-    outputFileTracingIncludes: {
-      '/api/**/*': ['./node_modules/**/*.wasm', './node_modules/**/*.node'],
+    // Only include necessary files for specific routes that need them
+    outputFileTracingExcludes: {
+      '*': [
+        'node_modules/@swc/core-linux-x64-gnu',
+        'node_modules/@swc/core-linux-x64-musl',
+        'node_modules/@esbuild',
+        'node_modules/webpack',
+        'node_modules/rollup',
+        'node_modules/terser',
+      ],
     },
   },
 }
