@@ -10,6 +10,15 @@ const nextConfig = {
     unoptimized: true,
   },
   output: 'standalone',
+  webpack: (config, { isServer }) => {
+    // Optimize webpack cache to avoid "Serializing big strings" warnings
+    config.cache = {
+      type: 'filesystem',
+      compression: 'gzip',
+      maxMemoryGenerations: 1,
+    }
+    return config
+  },
   experimental: {
     // Only include necessary files for specific routes that need them
     outputFileTracingExcludes: {
