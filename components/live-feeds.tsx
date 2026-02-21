@@ -18,53 +18,65 @@ interface ScamFeed {
   url?: string
 }
 
-// Static fallback data
+// Static fallback data - updated Feb 2026
 const fallbackFeeds = [
   {
-    source: "BBC Scam Watch",
-    title: "New WhatsApp Business Account Scam Targeting UK Nigerians",
-    time: "2 hours ago",
+    source: "INTERPOL",
+    title: "Operation Red Card 2.0: 651 Arrested in 16 African Countries, $4.3M Recovered",
+    time: "1 day ago",
+    type: "Alert",
+    severity: "high" as const,
+  },
+  {
+    source: "BBC News Africa",
+    title: "Ghana Arrests 9 Nigerians Running Cyber-Crime Networks From Accra Offices",
+    time: "2 days ago",
+    type: "Alert",
+    severity: "high" as const,
+  },
+  {
+    source: "CyberInsider",
+    title: "Exposed Database Leaks 3 Billion Records Including SSNs and Passwords",
+    time: "1 day ago",
+    type: "Breach",
+    severity: "high" as const,
+  },
+  {
+    source: "Malwarebytes",
+    title: "Fake Gemini AI Chatbot Promotes Bogus 'Google Coin' in 500% Deepfake Surge",
+    time: "3 days ago",
     type: "Alert",
     severity: "high" as const,
   },
   {
     source: "FTC Consumer Alerts",
-    title: "Romance Scam Losses Reach $547M in 2024",
-    time: "4 hours ago",
-    type: "Report",
-    severity: "medium" as const,
-  },
-  {
-    source: "Google Safe Browsing",
-    title: "Phishing Site Blocked: fake-mtn-promo.com",
-    time: "6 hours ago",
-    type: "Block",
-    severity: "high" as const,
-  },
-  {
-    source: "African Telecom Advisory",
-    title: "SIM Swap Attacks Increase 40% Across West Africa",
-    time: "8 hours ago",
+    title: "Valentine's Day Warning: AI-Enhanced Romance Scams Harder to Detect Than Ever",
+    time: "1 week ago",
     type: "Advisory",
-    severity: "high" as const,
+    severity: "medium" as const,
   },
 ]
 
 const fallbackNews = [
   {
-    title: "Mobile Banking Security: New Protection Guidelines Released",
-    source: "African Cybersecurity Alliance",
-    time: "1 hour ago",
+    title: "INTERPOL Recovers $45M in Losses From African Cybercrime Crackdown",
+    source: "INTERPOL / AFJOC",
+    time: "1 day ago",
   },
   {
-    title: "Mobile Money Fraud Prevention: New Guidelines Released",
-    source: "Central Bank of Nigeria",
-    time: "3 hours ago",
+    title: "Tax Season Alert: IRS and USPS Impersonation Texts and Emails Surging",
+    source: "FTC Consumer Alerts",
+    time: "3 days ago",
   },
   {
-    title: "Phishing Attacks on African Freelancers Rise 60%",
-    source: "Digital Security Report",
-    time: "5 hours ago",
+    title: "Ivory Coast Seizes 240 Phones in Mobile Loan Fraud Operation",
+    source: "INTERPOL Operation Red Card",
+    time: "1 day ago",
+  },
+  {
+    title: "Kenya Busts Investment Scam Ring Using Fake Dashboards to Lure Victims",
+    source: "INTERPOL",
+    time: "1 day ago",
   },
 ]
 
@@ -218,8 +230,8 @@ export function LiveFeeds() {
           <CardContent className="p-6 text-center">
             <h3 className="text-lg font-semibold mb-2">Powered by Trusted Sources</h3>
             <p className="text-muted-foreground text-sm">
-              Our feeds integrate with BBC Scam Watch, FTC Consumer Alerts, Google Safe Browsing, and African
-              telecom security advisories for comprehensive coverage.
+              Our feeds integrate with INTERPOL, BBC News Africa, FTC Consumer Alerts, Malwarebytes, CyberInsider,
+              and African law enforcement advisories for comprehensive, real-time coverage.
             </p>
           </CardContent>
         </Card>

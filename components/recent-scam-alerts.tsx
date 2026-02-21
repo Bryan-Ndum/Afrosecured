@@ -5,84 +5,94 @@ import { Card } from "@/components/ui/card"
 
 const recentScams = [
   {
-    title: "AI-Powered Job Scams Surge Globally",
-    description: "Scammers increasingly using AI tools to create sophisticated fake job postings, deepfake video interviews, and fraudulent recruitment schemes. Google reports significant rise in AI-enhanced employment fraud targeting job seekers worldwide.",
+    title: "INTERPOL Operation Red Card 2.0: 651 Arrested Across Africa",
+    description: "INTERPOL's Operation Red Card 2.0 (Dec 2025 - Jan 2026) dismantled criminal networks across 16 African nations, arresting 651 suspects and recovering $4.3 million. The operation uncovered scams linked to over $45 million in losses and identified 1,247 victims, seizing 2,341 devices.",
     learnMore: "/intel",
-    source: "https://blog.google/technology/safety-security/fraud-and-scams-advisory-november-2025/",
-    sourceName: "Google Security",
-    severity: "critical"
-  },
-  {
-    title: "DoorDash Data Breach Exposes Millions",
-    description: "Social engineering attack on DoorDash in November 2025 compromised user contact details across US, Canada, Australia, and New Zealand. Highlights growing threat of social engineering which now accounts for 36% of all cyber intrusions.",
-    learnMore: "/intel",
-    source: "https://www.techrepublic.com/article/news-doordash-breach-november-2025/",
-    sourceName: "TechRepublic",
-    severity: "critical"
-  },
-  {
-    title: "Mobile Money & SIM Swap Fraud",
-    description: "Sophisticated attacks targeting mobile money accounts through SIM swapping techniques. Attackers gain control of phone numbers to access financial accounts and transfer funds.",
-    learnMore: "/intel",
-    source: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5257020",
-    sourceName: "SSRN Research",
-    severity: "critical"
-  },
-  {
-    title: "Crypto & Investment Scams in Africa",
-    description: "Massive cybercrime networks dismantled across Africa, involving cryptocurrency fraud and fake investment schemes that defrauded victims of millions.",
-    learnMore: "/intel",
-    source: "https://www.interpol.int/en/News-and-Events/News/2025/African-authorities-dismantle-massive-cybercrime-and-fraud-networks-recover-millions",
+    source: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
     sourceName: "INTERPOL",
-    severity: "critical"
+    severity: "critical",
+    date: "Feb 18, 2026"
   },
   {
-    title: "Fake World Bank & NGO Impersonation",
-    description: "Scammers impersonating World Bank officials and NGO representatives to solicit personal information and money from unsuspecting victims.",
+    title: "Massive Data Leak: 3 Billion Records Including SSNs Exposed",
+    description: "A misconfigured cloud database containing approximately 2.7 billion SSN records and 3 billion email/password combinations was discovered exposed online without authentication. Researchers estimate the dataset could contain over 1 billion unique SSNs.",
     learnMore: "/intel",
-    source: "https://www.miragenews.com/world-bank-alerts-public-to-fraud-scams-using-1572449/",
-    sourceName: "World Bank Alert",
-    severity: "high"
+    source: "https://cyberinsider.com/exposed-database-leaks-2-7-billion-ssns-and-3-billion-passwords",
+    sourceName: "CyberInsider",
+    severity: "critical",
+    date: "Feb 19, 2026"
   },
   {
-    title: "Remote Work & Job Offer Scams",
-    description: "Fake job postings promising remote work opportunities that require upfront payments or personal information, targeting job seekers across Africa.",
+    title: "AI Deepfake Crypto Scams Surge 500%",
+    description: "A 500% surge in AI-powered deepfake cryptocurrency scams has been reported, including a fake 'Gemini' AI chatbot promoting a bogus 'Google Coin'. Scammers use celebrity impersonations and AI-generated content to lure victims into fraudulent investment platforms.",
     learnMore: "/intel",
-    source: "https://www.mcafee.com/blogs/internet-security/scam-alert-the-alarming-reality-behind-2025s-explosion-in-digital-fraud/",
-    sourceName: "McAfee Security",
-    severity: "high"
+    source: "https://www.malwarebytes.com/blog/ai/2026/02/scammers-use-fake-gemini-ai-chatbot-to-sell-fake-google-coin",
+    sourceName: "Malwarebytes",
+    severity: "critical",
+    date: "Feb 18, 2026"
   },
   {
-    title: "Review Extortion Schemes",
-    description: "Businesses and individuals targeted by fraudsters who post fake negative reviews and demand payment to remove them.",
+    title: "Ghana Arrests Nigerians Running Cyber-Crime Networks in Accra",
+    description: "Ghana's security forces arrested 9 Nigerians coordinating cyber-crime from makeshift offices in Accra. 44 others, believed to be victims lured under false pretenses, were detained. Raids uncovered 62 laptops, 52 phones, and 2 firearms. Victims were forced into romance scams and BEC fraud.",
     learnMore: "/intel",
-    source: "https://blog.google/technology/safety-security/fraud-and-scams-advisory-november-2025/",
-    sourceName: "Google Security",
-    severity: "medium"
+    source: "https://bbc.com/news/articles/cr4k35q6yr0o",
+    sourceName: "BBC News",
+    severity: "critical",
+    date: "Feb 20, 2026"
   },
   {
-    title: "Romance Sextortion (BM Boys - Nigeria)",
-    description: "Nigerian cybercrime group known as 'BM Boys' targeting victims through romance scams on social media, leading to sextortion and financial theft.",
+    title: "FTC Valentine's Day Romance Scam Warning",
+    description: "The FTC issued a consumer alert warning that romance scams are increasingly powered by AI, making them harder to spot. Scammers build trust over weeks, then request money via wire transfers, gift cards, or cryptocurrency. Reverse image searches can help expose fake profiles.",
     learnMore: "/intel",
-    source: "https://www.theguardian.com/us-news/2025/may/11/sextortion-nigeria-bm-boys-tiktok",
-    sourceName: "The Guardian",
-    severity: "critical"
+    source: "https://consumer.ftc.gov/consumer-alerts/2026/02/why-cant-new-love-interest-meet-person",
+    sourceName: "FTC",
+    severity: "high",
+    date: "Feb 12, 2026"
   },
   {
-    title: "Romance Scams Targeting Diaspora",
-    description: "Organized romance scams specifically targeting African diaspora communities, with losses reaching millions annually.",
+    title: "Tax Season Phishing: Fake IRS & USPS Messages Surge",
+    description: "Scammers are impersonating the IRS and USPS via email and text, demanding immediate payment or personal data. Messages use fake logos, spoofed .gov addresses, and urgent language. The IRS never initiates contact by email, text, or social media.",
     learnMore: "/intel",
-    source: "https://apnews.com/article/85af8ffb6c257a902ce3360cabf28974",
-    sourceName: "AP News",
-    severity: "high"
+    source: "https://consumer.ftc.gov/consumer-alerts/2026/01/text-or-email-about-your-tax-refund-scam",
+    sourceName: "FTC",
+    severity: "high",
+    date: "Feb 2026"
   },
   {
-    title: "Ghana Cybercrime & Fake Recruitment",
-    description: "Fake recruitment agencies in Ghana promising overseas jobs, collecting fees and personal documents, then disappearing.",
+    title: "Mobile Loan Fraud Crackdown in Ivory Coast",
+    description: "In Ivory Coast, law enforcement made 58 arrests and seized 240 phones, 25 laptops, and 300+ SIM cards targeting mobile loan fraud. These scams targeted vulnerable populations through deceptive mobile apps, imposing hidden fees and harvesting sensitive personal data.",
     learnMore: "/intel",
-    source: "https://apnews.com/article/b4d2f1a70c0031fb87b6d575efb55e84",
-    sourceName: "AP News",
-    severity: "high"
+    source: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
+    sourceName: "INTERPOL",
+    severity: "high",
+    date: "Feb 18, 2026"
+  },
+  {
+    title: "Kenya Investment Scam Ring Busted",
+    description: "Kenyan authorities arrested 27 people linked to investment fraud schemes using messaging apps and social media. Scammers solicited investments as low as $50 in fake ventures with fabricated dashboards showing fake returns, while blocking all withdrawal requests.",
+    learnMore: "/intel",
+    source: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
+    sourceName: "INTERPOL",
+    severity: "high",
+    date: "Feb 18, 2026"
+  },
+  {
+    title: "Nigeria Telecom Infiltration Syndicate Dismantled",
+    description: "Nigerian authorities dismantled a cybercrime syndicate that infiltrated the internal platform of a major telecom provider through compromised staff credentials, siphoning significant volumes of airtime and data for illegal resale.",
+    learnMore: "/intel",
+    source: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
+    sourceName: "INTERPOL",
+    severity: "critical",
+    date: "Feb 18, 2026"
+  },
+  {
+    title: "SMS Phishing Targets Travelers in Southeast Asia",
+    description: "Singapore police warned that scammers are sending SMS phishing messages impersonating toll authorities, targeting travelers. The tactic is spreading globally as scammers exploit location-based services to craft convincing, targeted phishing attacks.",
+    learnMore: "/intel",
+    source: "https://www.police.gov.sg/Media-Hub/News/2026/02/20260210_police_advisory_on_phishing_scams_targeting_singaporean_travellers_to_malaysia",
+    sourceName: "Singapore Police",
+    severity: "medium",
+    date: "Feb 10, 2026"
   }
 ]
 
@@ -124,14 +134,19 @@ export function RecentScamAlerts() {
               <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                 {scam.description}
               </p>
-              <div className="flex items-center justify-between gap-4">
-                <a 
-                  href={scam.learnMore}
-                  className="text-primary hover:underline text-sm font-medium inline-flex items-center gap-1"
-                >
-                  Learn More
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <a 
+                    href={scam.learnMore}
+                    className="text-primary hover:underline text-sm font-medium inline-flex items-center gap-1"
+                  >
+                    Learn More
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                  {scam.date && (
+                    <span className="text-xs text-muted-foreground">{scam.date}</span>
+                  )}
+                </div>
                 <a 
                   href={scam.source}
                   target="_blank"
