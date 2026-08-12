@@ -1,3 +1,12 @@
 {
-  "crons": []
+  "crons": [
+    {
+      "path": "/api/cron/update-articles",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/sync-threat-intelligence",
+      "schedule": "0 3 * * *"
+    }
+  ]
 }
