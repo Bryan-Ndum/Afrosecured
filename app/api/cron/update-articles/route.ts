@@ -1,11 +1,41 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
-import { extractThreatIntelligence, fetchArticleContent } from "@/lib/ai-content-extractor"
+import Parser from "rss-parser"
+import { extractThreatIntelligence } from "@/lib/ai-content-extractor"
 
 export const dynamic = "force-dynamic"
 export const maxDuration = 60
 
+// Stop AI enrichment once we've used this much of our time budget (ms),
+// leaving headroom for the final DB writes and logging before maxDuration.
+const AI_TIME_BUDGET_MS = 45_000
+
+const FEEDS = [
+  { url: "https://krebsonsecurity.com/feed/", source: "Krebs on Security", category: "Investigative Journalism" },
+  { url: "https://feeds.feedburner.com/TheHackersNews", source: "The Hacker News", category: "Breaking News" },
+  { url: "https://www.darkreading.com/rss.xml", source: "Dark Reading", category: "Enterprise Security" },
+  { url: "https://www.bleepingcomputer.com/feed/", source: "BleepingComputer", category: "Technical Analysis" },
+  { url: "https://www.welivesecurity.com/en/rss/feed/", source: "WeLiveSecurity", category: "Threat Research" },
+]
+
+const ITEMS_PER_FEED = 6
+
+const parser = new Parser({
+  timeout: 8000,
+  headers: { "User-Agent": "AfroSecured-Bot/1.0 (Security Research; +https://afrosecured.com)" },
+})
+
+function cleanText(html?: string) {
+  if (!html) return ""
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 export async function GET(request: Request) {
+  const startedAt = Date.now()
+
   try {
     const authHeader = request.headers.get("authorization")
     const isManualTrigger = authHeader === `Bearer ${process.env.CRON_SECRET}`
@@ -15,149 +45,162 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    console.log("[v0] Starting AI-powered article update cron job...")
-
     const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-    const feeds = [
-      {
-        url: "https://krebsonsecurity.com/feed/",
-        source: "Krebs on Security",
-        category: "Investigative Journalism",
-      },
-      {
-        url: "https://feeds.feedburner.com/TheHackersNews",
-        source: "The Hacker News",
-        category: "Breaking News",
-      },
-      {
-        url: "https://www.darkreading.com/rss.xml",
-        source: "Dark Reading",
-        category: "Enterprise Security",
-      },
-      {
-        url: "https://www.bleepingcomputer.com/feed/",
-        source: "BleepingComputer",
-        category: "Technical Analysis",
-      },
-    ]
+    // 1. Fetch every feed in parallel (fast, network-bound).
+    const feedResults = await Promise.allSettled(
+      FEEDS.map(async (feed) => {
+        const parsed = await parser.parseURL(feed.url)
+        return { feed, items: (parsed.items || []).slice(0, ITEMS_PER_FEED) }
+      }),
+    )
 
-    let totalProcessed = 0
-    let totalErrors = 0
-    let totalAiProcessed = 0
+    // 2. Flatten into a single list of article rows.
+    type PendingArticle = {
+      title: string
+      link: string
+      pub_date: string
+      description: string
+      source: string
+      category: string
+      content: string
+    }
 
-    for (const feed of feeds) {
+    const articles: PendingArticle[] = []
+    let feedErrors = 0
+
+    for (const result of feedResults) {
+      if (result.status !== "fulfilled") {
+        feedErrors++
+        continue
+      }
+      const { feed, items } = result.value
+      for (const item of items) {
+        if (!item.link || !item.title) continue
+        const description = cleanText(item.contentSnippet || item.content || item.summary).substring(0, 500)
+        articles.push({
+          title: item.title,
+          link: item.link,
+          pub_date: item.isoDate || (item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString()),
+          description,
+          source: feed.source,
+          category: feed.category,
+          content: cleanText(item.content || item.contentSnippet).substring(0, 8000),
+        })
+      }
+    }
+
+    // 3. Upsert every article immediately WITHOUT AI so fresh content always
+    //    lands even if AI enrichment runs out of time.
+    let upserted = 0
+    if (articles.length > 0) {
+      const { error } = await supabase.from("cybersecurity_articles").upsert(
+        articles.map((a) => ({ ...a, updated_at: new Date().toISOString() })),
+        { onConflict: "link", ignoreDuplicates: false },
+      )
+      if (error) {
+        console.error("Bulk upsert error:", error.message)
+      } else {
+        upserted = articles.length
+      }
+    }
+
+    // 4. Enrich with AI within the remaining time budget. Prioritise articles
+    //    that have not been AI-processed yet.
+    const { data: toEnrich } = await supabase
+      .from("cybersecurity_articles")
+      .select("id, title, content, description, source")
+      .eq("ai_processed", false)
+      .order("pub_date", { ascending: false })
+      .limit(20)
+
+    let aiProcessed = 0
+    let aiErrors = 0
+
+    for (const article of toEnrich || []) {
+      if (Date.now() - startedAt > AI_TIME_BUDGET_MS) break
       try {
-        console.log(`[v0] Fetching ${feed.source}...`)
-        const response = await fetch(
-          `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&api_key=public&count=5`,
-          { next: { revalidate: 0 } },
+        const intel = await extractThreatIntelligence(
+          article.title,
+          article.content || article.description || article.title,
+          article.source,
         )
-        const data = await response.json()
-
-        if (data.status === "ok" && data.items) {
-          for (const item of data.items) {
-            try {
-              const cleanDescription = item.description?.replace(/<[^>]*>/g, "").substring(0, 500) || ""
-
-              console.log(`[v0] Fetching full content for: ${item.title}`)
-              const fullContent = await fetchArticleContent(item.link)
-
-              let aiIntelligence = null
-              if (fullContent) {
-                console.log(`[v0] Extracting threat intelligence with AI...`)
-                aiIntelligence = await extractThreatIntelligence(item.title, fullContent, feed.source)
-                totalAiProcessed++
-              }
-
-              const articleData = {
-                title: item.title,
-                link: item.link,
-                pub_date: new Date(item.pubDate).toISOString(),
-                description: cleanDescription,
-                source: feed.source,
-                category: feed.category,
-                content: fullContent || item.content || item.description || "",
-                ai_summary: aiIntelligence?.summary || null,
-                threat_level: aiIntelligence?.threatLevel || null,
-                threat_indicators: aiIntelligence?.threatIndicators || [],
-                affected_platforms: aiIntelligence?.affectedPlatforms || [],
-                cve_ids: aiIntelligence?.cveIds || [],
-                iocs: aiIntelligence?.iocs || {},
-                recommendations: aiIntelligence?.recommendations || [],
-                tags: aiIntelligence?.tags || [],
-                ai_processed: !!aiIntelligence,
-                ai_processed_at: aiIntelligence ? new Date().toISOString() : null,
-                updated_at: new Date().toISOString(),
-              }
-
-              const { error } = await supabase.from("cybersecurity_articles").upsert(articleData, {
-                onConflict: "link",
-                ignoreDuplicates: false,
-              })
-
-              if (error) {
-                console.error(`[v0] Error upserting article from ${feed.source}:`, error.message)
-                totalErrors++
-              } else {
-                totalProcessed++
-                console.log(`[v0] Successfully processed: ${item.title}`)
-              }
-
-              await new Promise((resolve) => setTimeout(resolve, 2000))
-            } catch (itemError) {
-              console.error(`[v0] Error processing article:`, itemError)
-              totalErrors++
-            }
-          }
-          console.log(`[v0] Successfully processed ${feed.source}`)
-        } else {
-          console.error(`[v0] Failed to fetch ${feed.source}:`, data.message || "Unknown error")
-          totalErrors++
-        }
-
-        await new Promise((resolve) => setTimeout(resolve, 3000))
-      } catch (error) {
-        console.error(`[v0] Error fetching ${feed.source}:`, error)
-        totalErrors++
-      }
-    }
-
-    // Clean up old articles (keep last 100 per source)
-    console.log("[v0] Cleaning up old articles...")
-    for (const feed of feeds) {
-      try {
-        const { data: articles } = await supabase
+        const { error } = await supabase
           .from("cybersecurity_articles")
-          .select("id")
-          .eq("source", feed.source)
-          .order("pub_date", { ascending: false })
-          .range(100, 1000)
-
-        if (articles && articles.length > 0) {
-          const idsToDelete = articles.map((a) => a.id)
-          await supabase.from("cybersecurity_articles").delete().in("id", idsToDelete)
-          console.log(`[v0] Cleaned up ${articles.length} old articles from ${feed.source}`)
+          .update({
+            ai_summary: intel.summary,
+            threat_level: intel.threatLevel,
+            threat_indicators: intel.threatIndicators,
+            affected_platforms: intel.affectedPlatforms,
+            cve_ids: intel.cveIds,
+            iocs: intel.iocs,
+            recommendations: intel.recommendations,
+            tags: intel.tags,
+            ai_processed: true,
+            ai_processed_at: new Date().toISOString(),
+          })
+          .eq("id", article.id)
+        if (error) {
+          aiErrors++
+        } else {
+          aiProcessed++
         }
-      } catch (cleanupError) {
-        console.error(`[v0] Error cleaning up ${feed.source}:`, cleanupError)
+      } catch {
+        aiErrors++
       }
     }
 
+    // 5. Trim old articles so the table stays lean (keep newest 150).
+    try {
+      const { data: stale } = await supabase
+        .from("cybersecurity_articles")
+        .select("id")
+        .order("pub_date", { ascending: false })
+        .range(150, 1000)
+      if (stale && stale.length > 0) {
+        await supabase
+          .from("cybersecurity_articles")
+          .delete()
+          .in(
+            "id",
+            stale.map((a) => a.id),
+          )
+      }
+    } catch (cleanupError) {
+      console.error("Cleanup error:", cleanupError)
+    }
+
+    const executionMs = Date.now() - startedAt
     const result = {
       success: true,
-      message: `Processed ${totalProcessed} articles (${totalAiProcessed} with AI) with ${totalErrors} errors`,
-      totalProcessed,
-      totalAiProcessed,
-      totalErrors,
-      timestamp: new Date().toISOString(),
+      message: `Pulled ${upserted} articles, AI-enriched ${aiProcessed} (${aiErrors} AI errors, ${feedErrors} feed errors)`,
+      articlesPulled: upserted,
+      aiProcessed,
+      aiErrors,
+      feedErrors,
+      executionMs,
       trigger: isManualTrigger ? "manual" : "cron",
+      timestamp: new Date().toISOString(),
     }
 
-    console.log("[v0] AI-powered cron job completed:", result)
+    // Best-effort automation log (non-fatal if the table is unavailable).
+    try {
+      await supabase.from("automation_logs").insert({
+        job_name: "update-articles",
+        job_type: "cron",
+        status: feedErrors > 0 || aiErrors > 0 ? "partial" : "success",
+        items_processed: upserted,
+        items_failed: feedErrors + aiErrors,
+        execution_time_ms: executionMs,
+        metadata: result,
+      })
+    } catch {
+      // ignore logging failures
+    }
+
     return NextResponse.json(result)
   } catch (error) {
-    console.error("[v0] Cron job error:", error)
+    console.error("Article update cron error:", error)
     return NextResponse.json(
       {
         error: "Failed to update articles",
