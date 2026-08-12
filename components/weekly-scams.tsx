@@ -17,6 +17,54 @@ interface WeeklyScam {
   url: string
 }
 
+// Used only when the live feed is unavailable or has not been populated yet.
+const fallbackScams: WeeklyScam[] = [
+  {
+    id: "1",
+    title: "AI Deepfake Crypto Investment Scams",
+    description:
+      "500% surge in AI-powered deepfake scams using celebrity impersonations to promote fake crypto platforms. A fake 'Gemini' chatbot is pushing a bogus 'Google Coin' to steal funds from investors.",
+    category: "AI / Crypto Fraud",
+    victims: 3200,
+    trend: "rising",
+    source: "Malwarebytes",
+    url: "https://www.malwarebytes.com/blog/ai/2026/02/scammers-use-fake-gemini-ai-chatbot-to-sell-fake-google-coin",
+  },
+  {
+    id: "2",
+    title: "Mobile Loan App Fraud Across West Africa",
+    description:
+      "Deceptive mobile loan apps targeting vulnerable populations, imposing hidden fees, abusive debt-collection, and harvesting sensitive personal and financial data. 58 arrests made in Ivory Coast alone.",
+    category: "Mobile Fraud",
+    victims: 1800,
+    trend: "rising",
+    source: "INTERPOL",
+    url: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
+  },
+  {
+    id: "3",
+    title: "Romance & Sextortion Schemes (AI-Enhanced)",
+    description:
+      "Romance scams increasingly use AI-generated content to build fake profiles. Victims lured into sharing intimate content, then extorted. FTC warns these scams are harder to detect than ever.",
+    category: "Romance / Sextortion",
+    victims: 2450,
+    trend: "rising",
+    source: "FTC",
+    url: "https://consumer.ftc.gov/consumer-alerts/2026/02/why-cant-new-love-interest-meet-person",
+  },
+  {
+    id: "4",
+    title: "IRS & USPS Phishing Texts During Tax Season",
+    description:
+      "Fake IRS refund notices and USPS delivery texts demand immediate payment or personal data. Messages use spoofed .gov addresses and fake logos. The IRS never contacts you first by email or text.",
+    category: "Phishing / Smishing",
+    victims: 4100,
+    trend: "rising",
+    source: "FTC",
+    url: "https://consumer.ftc.gov/consumer-alerts/2026/01/text-or-email-about-your-tax-refund-scam",
+  },
+]
+
 export function WeeklyScams() {
   const [scams, setScams] = useState<WeeklyScam[]>([])
   const [loading, setLoading] = useState(true)
@@ -24,54 +72,33 @@ export function WeeklyScams() {
   useEffect(() => {
     const fetchWeeklyScams = async () => {
       setLoading(true)
-      // In production, this would fetch from your API aggregating Reddit, Trustpilot, etc.
-      const mockScams: WeeklyScam[] = [
-        {
-          id: "1",
-          title: "AI Deepfake Crypto Investment Scams",
-          description:
-            "500% surge in AI-powered deepfake scams using celebrity impersonations to promote fake crypto platforms. A fake 'Gemini' chatbot is pushing a bogus 'Google Coin' to steal funds from investors.",
-          category: "AI / Crypto Fraud",
-          victims: 3200,
-          trend: "rising",
-          source: "Malwarebytes",
-          url: "https://www.malwarebytes.com/blog/ai/2026/02/scammers-use-fake-gemini-ai-chatbot-to-sell-fake-google-coin",
-        },
-        {
-          id: "2",
-          title: "Mobile Loan App Fraud Across West Africa",
-          description:
-            "Deceptive mobile loan apps targeting vulnerable populations, imposing hidden fees, abusive debt-collection, and harvesting sensitive personal and financial data. 58 arrests made in Ivory Coast alone.",
-          category: "Mobile Fraud",
-          victims: 1800,
-          trend: "rising",
-          source: "INTERPOL",
-          url: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
-        },
-        {
-          id: "3",
-          title: "Romance & Sextortion Schemes (AI-Enhanced)",
-          description:
-            "Romance scams increasingly use AI-generated content to build fake profiles. Victims lured into sharing intimate content, then extorted. FTC warns these scams are harder to detect than ever.",
-          category: "Romance / Sextortion",
-          victims: 2450,
-          trend: "rising",
-          source: "FTC",
-          url: "https://consumer.ftc.gov/consumer-alerts/2026/02/why-cant-new-love-interest-meet-person",
-        },
-        {
-          id: "4",
-          title: "IRS & USPS Phishing Texts During Tax Season",
-          description:
-            "Fake IRS refund notices and USPS delivery texts demand immediate payment or personal data. Messages use spoofed .gov addresses and fake logos. The IRS never contacts you first by email or text.",
-          category: "Phishing / Smishing",
-          victims: 4100,
-          trend: "rising",
-          source: "FTC",
-          url: "https://consumer.ftc.gov/consumer-alerts/2026/01/text-or-email-about-your-tax-refund-scam",
-        },
-      ]
-      setScams(mockScams)
+      try {
+        // Pull the freshest high-severity threats the cron job scraped from the web.
+        const response = await fetch("/api/intel?trending=true&limit=4")
+        if (response.ok) {
+          const { data } = await response.json()
+          if (Array.isArray(data) && data.length > 0) {
+            const live: WeeklyScam[] = data.map((item: any, index: number) => ({
+              id: item.id?.toString() || `live-${index}`,
+              title: item.title,
+              description: item.description,
+              category: item.scam_type || "Threat",
+              victims: 0,
+              trend: "rising" as const,
+              source: item.source,
+              url: item.source_url || item.url || "#",
+            }))
+            setScams(live)
+            setLoading(false)
+            return
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch weekly scams:", error)
+      }
+
+      // Fallback if the feed is unavailable or empty.
+      setScams(fallbackScams)
       setLoading(false)
     }
 
@@ -136,10 +163,16 @@ export function WeeklyScams() {
                 <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{scam.description}</p>
 
                 <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                  <div className="text-sm">
-                    <span className="text-muted-foreground">Reported victims: </span>
-                    <span className="font-bold text-destructive">{scam.victims.toLocaleString()}</span>
-                  </div>
+                  {scam.victims > 0 ? (
+                    <div className="text-sm">
+                      <span className="text-muted-foreground">Reported victims: </span>
+                      <span className="font-bold text-destructive">{scam.victims.toLocaleString()}</span>
+                    </div>
+                  ) : (
+                    <Badge variant="destructive" className="text-xs">
+                      Live Threat
+                    </Badge>
+                  )}
                   <Button variant="ghost" size="sm" asChild>
                     <a href={scam.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
                       View Source
