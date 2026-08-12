@@ -3,23 +3,23 @@ import { NextResponse } from "next/server"
 export const dynamic = "force-dynamic"
 
 const fallbackScam = {
-  id: "fallback",
-  title: "Organized Crime Rings Target International Students",
+  id: "fallback-2026-02",
+  title: "INTERPOL Operation Red Card 2.0: Massive Africa-Wide Cybercrime Crackdown",
   description:
-    "Sophisticated criminal networks are targeting international students in Canada with fake study permits, fraudulent acceptance letters, and bogus scholarship offers. These scams involve fake websites impersonating legitimate universities, forged immigration documents, and money laundering schemes that exploit vulnerable students seeking education abroad.",
-  source: "University Affairs",
-  source_url: "https://universityaffairs.ca/features/organized-criminals-target-international-students/",
-  scam_type: "employment",
-  severity: "high",
-  location: "Canada, International",
-  tags: ["education", "immigration", "fake_documents", "organized_crime"],
+    "INTERPOL's Operation Red Card 2.0 has arrested 651 suspects across 16 African countries and recovered over $4.3 million. The eight-week operation (Dec 2025 - Jan 2026) targeted high-yield investment scams, mobile money fraud, and fraudulent mobile loan apps, uncovering schemes linked to over $45 million in losses and 1,247 identified victims. Authorities seized 2,341 devices and took down 1,442 malicious IPs and domains.",
+  source: "INTERPOL",
+  source_url: "https://www.interpol.int/News-and-Events/News/2026/Major-operation-in-Africa-targeting-online-scams-nets-651-arrests-recovers-USD-4.3-million",
+  scam_type: "organized_crime",
+  severity: "critical",
+  location: "16 African Countries",
+  tags: ["interpol", "mobile_money", "investment_fraud", "organized_crime", "operation_red_card"],
   created_at: new Date().toISOString(),
 }
 
 export async function GET() {
   try {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      console.log("[v0] Supabase not configured, using fallback data")
+      
       return NextResponse.json({ data: fallbackScam })
     }
 
@@ -58,7 +58,7 @@ export async function GET() {
 
     return NextResponse.json({ data: data[0] })
   } catch (error) {
-    console.error("[v0] API error:", error)
+    console.error("Trending scam API error:", error)
     return NextResponse.json({ data: fallbackScam })
   }
 }

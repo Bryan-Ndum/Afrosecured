@@ -24,8 +24,6 @@ export class VisaClient {
   private isConfigured: boolean
 
   constructor() {
-    console.log("[v0] ===== Initializing Visa Client =====")
-
     try {
       // Load credentials from environment variables
       this.cert = process.env.VISA_CERT_PEM || ""
@@ -37,39 +35,8 @@ export class VisaClient {
       this.apiKey = process.env.VISA_API_KEY || ""
 
       this.isConfigured = !!(this.cert && this.key && this.ca && this.userId && this.password && this.apiKey)
-
-      console.log("[v0] Visa Configuration Check:", {
-        hasCert: !!this.cert,
-        certLength: this.cert.length,
-        hasKey: !!this.key,
-        keyLength: this.key.length,
-        hasCa: !!this.ca,
-        caLength: this.ca.length,
-        baseUrl: this.baseUrl,
-        hasUserId: !!this.userId,
-        userIdLength: this.userId.length,
-        hasPassword: !!this.password,
-        passwordLength: this.password.length,
-        hasApiKey: !!this.apiKey,
-        apiKeyLength: this.apiKey.length,
-        isFullyConfigured: this.isConfigured,
-      })
-
-      if (!this.isConfigured) {
-        console.warn("[v0] ⚠️  Visa credentials incomplete. Will use mock data.")
-        console.warn("[v0] Missing:", {
-          cert: !this.cert,
-          key: !this.key,
-          ca: !this.ca,
-          userId: !this.userId,
-          password: !this.password,
-          apiKey: !this.apiKey,
-        })
-      } else {
-        console.log("[v0] ✅ Visa credentials fully configured")
-      }
     } catch (error) {
-      console.error("[v0] ❌ Error initializing Visa Client:", error)
+      console.error("Error initializing Visa Client:", error)
       this.isConfigured = false
       throw error
     }
@@ -81,22 +48,14 @@ export class VisaClient {
   }
 
   async request(options: VisaRequestOptions): Promise<VisaResponse> {
-    console.log("[v0] ===== Visa API Request =====")
-    console.log("[v0] Method:", options.method)
-    console.log("[v0] Path:", options.path)
-    console.log("[v0] Has Body:", !!options.body)
-    console.log("[v0] Is Configured:", this.isConfigured)
-
     // If not configured, return mock data immediately
     if (!this.isConfigured) {
-      console.log("[v0] 🎭 Returning mock response (not configured)")
       return this.getMockResponse(options.path)
     }
 
     try {
       // For now, use mock data even when configured
       // TODO: Implement actual mTLS connection when certificates are properly formatted
-      console.log("[v0] 🎭 Using mock response (mTLS implementation pending)")
       return this.getMockResponse(options.path)
 
       /* 
@@ -132,7 +91,7 @@ export class VisaClient {
       }
       */
     } catch (error) {
-      console.error("[v0] ❌ Visa API Request Error:", error)
+      console.error("Visa API Request Error:", error)
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -142,7 +101,6 @@ export class VisaClient {
   }
 
   private getMockResponse(path: string): VisaResponse {
-    console.log("[v0] Generating mock response for path:", path)
 
     // Mock responses for testing
     if (path.includes("helloworld")) {
@@ -186,16 +144,14 @@ export class VisaClient {
   }
 
   async testConnection(): Promise<VisaResponse> {
-    console.log("[v0] ===== Testing Visa Connection =====")
     try {
       const result = await this.request({
         method: "GET",
         path: "/vdp/helloworld",
       })
-      console.log("[v0] Test connection result:", result)
       return result
     } catch (error) {
-      console.error("[v0] Test connection error:", error)
+      console.error("Test connection error:", error)
       return {
         success: false,
         error: error instanceof Error ? error.message : "Connection test failed",
@@ -205,8 +161,6 @@ export class VisaClient {
   }
 
   async resolveAlias(aliasId: string): Promise<VisaResponse> {
-    console.log("[v0] ===== Resolving Alias =====")
-    console.log("[v0] Alias ID:", aliasId)
     try {
       const result = await this.request({
         method: "POST",
@@ -215,10 +169,9 @@ export class VisaClient {
           aliasId,
         },
       })
-      console.log("[v0] Resolve alias result:", result)
       return result
     } catch (error) {
-      console.error("[v0] Resolve alias error:", error)
+      console.error("Resolve alias error:", error)
       return {
         success: false,
         error: error instanceof Error ? error.message : "Alias resolution failed",

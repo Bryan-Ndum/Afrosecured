@@ -93,7 +93,7 @@ export function HeroSection() {
 
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-sm text-primary">
           <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-          Launched 2025 • Open Beta
+          Live 2026 - Open Beta
         </div>
       </div>
     </section>

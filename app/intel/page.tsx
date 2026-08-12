@@ -211,18 +211,27 @@ export default async function IntelPage({
             {/* Quick Stats */}
             <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-6">
               <h3 className="text-lg font-semibold text-white mb-4">Threat Statistics</h3>
+              <p className="text-xs text-slate-500 mb-3">INTERPOL Op. Red Card 2.0 (Feb 2026)</p>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Active Threats</span>
-                  <span className="text-red-400 font-semibold">1,247</span>
+                  <span className="text-slate-400">Suspects Arrested</span>
+                  <span className="text-red-400 font-semibold">651</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Countries Affected</span>
-                  <span className="text-yellow-400 font-semibold">54</span>
+                  <span className="text-slate-400">Countries in Op.</span>
+                  <span className="text-yellow-400 font-semibold">16</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-400">Reports Today</span>
-                  <span className="text-green-400 font-semibold">89</span>
+                  <span className="text-slate-400">Funds Recovered</span>
+                  <span className="text-green-400 font-semibold">$4.3M</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Identified Victims</span>
+                  <span className="text-orange-400 font-semibold">1,247</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400">Devices Seized</span>
+                  <span className="text-blue-400 font-semibold">2,341</span>
                 </div>
               </div>
             </div>
@@ -232,23 +241,27 @@ export default async function IntelPage({
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <Shield className="w-4 h-4 text-green-500" />
-                  <span className="text-slate-300 text-sm">Gulf News</span>
+                  <span className="text-slate-300 text-sm">INTERPOL</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span className="text-slate-300 text-sm">BBC News Africa</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span className="text-slate-300 text-sm">FTC Consumer Alerts</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span className="text-slate-300 text-sm">Malwarebytes</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span className="text-slate-300 text-sm">CyberInsider</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Shield className="w-4 h-4 text-green-500" />
                   <span className="text-slate-300 text-sm">The Cable Nigeria</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span className="text-slate-300 text-sm">MSN News</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span className="text-slate-300 text-sm">BBC News</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span className="text-slate-300 text-sm">FTC Alerts</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
